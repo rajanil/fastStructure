@@ -1,0 +1,5 @@
+# python bytecode
+*.pyc
+
+# C object files and shared libraries
+*.so
