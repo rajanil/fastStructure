@@ -19,9 +19,13 @@ a set of Cython and pure Python scripts to load the data and run the algorithm.
 + [Numpy](http://www.numpy.org/)
 + [Scipy](http://www.scipy.org/)
 + [Cython](http://cython.org/)
++ [GNU Scientific Library](http://www.gnu.org/software/gsl/)
 
-A number of python distributions already have these modules packaged in them. It is also
-straightforward to install them from platform-specific binary packages OR from source.
+A number of python distributions already have the first three modules packaged in them. It is also
+straightforward to install all these dependencies 
+ (1) using various package managers for MACOSX and several Linux distributions 
+ (2) from platform-specific binary packages
+ (3) directly from source
 
 ## Getting the source code
 
