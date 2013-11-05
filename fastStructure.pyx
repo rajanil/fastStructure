@@ -25,7 +25,7 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
     batch_size = min([L,int(1000000/N)])
 
     # {results, fresults, fresultsa, fresults_notsm}
-    handle = open(outfile+'.log','w')
+    handle = open('%s.%d.log'%(outfile,K),'w')
     handle.close()
 
     itertime = time.time()
@@ -96,8 +96,8 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
         psi.update(G, pi)
         pi.update(G, psi)
         E = mlhood.marginal_likelihood(G, psi, pi)
-        handle = open(outfile+'.log','a')
-        handle.write("Marginal likelihood with initialization (%d) = %.10f\n"%(restart,E))
+        handle = open('%s.%d.log'%(outfile,K),'a')
+        handle.write("Marginal likelihood with initialization (%d) = %.10f\n"%(restart+1,E))
         handle.close()
         # select current initialization if it is better than all previous initializations
         if E>Estart:
@@ -110,7 +110,7 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
     pi = pistart.copy()
     psi = psistart.copy()
 
-    handle = open(outfile+'.log','a')
+    handle = open('%s.%d.log'%(outfile,K),'a')
     to_write = ["Iteration", "Marginal_Likelihood", "delta_Marginal_Likelihood", "Iteration_Time"]
     handle.write(' '.join(to_write)+"\n")
     to_write = ['%d'%iter, '%.10f'%E, '--', '%.3f'%itertime]
@@ -137,7 +137,7 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
             E = E_new
             itertime = time.time()-itertime
 
-            handle = open(outfile+'.log','a')
+            handle = open('%s.%d.log'%(outfile,K),'a')
             to_write = ['%d'%(iter+1), '%.10f'%E, '%.10f'%reltol, '%.3f'%itertime]
             handle.write(' '.join(to_write)+"\n")
             handle.close()
@@ -151,7 +151,7 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
     Q = psi.var/utils.insum(psi.var,[1])
 
     totaltime = time.time()-totaltime
-    handle = open(outfile+'.log','a')
+    handle = open('%s.%d.log'%(outfile,K),'a')
     handle.write("Marginal Likelihood = %.10f\n"%E)
     handle.write("Total time = %.4f seconds\n"%totaltime)
     handle.write("Total iterations = %d \n"%iter)
@@ -160,7 +160,7 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
     # Computing cross-validation error
     if cv:
         meandeviance = CV(G, psi, pi, cv, mintol)
-        handle = open(outfile+'.log','a')
+        handle = open('%s.%d.log'%(outfile,K),'a')
         handle.write("CV error = %.7f, %.7f \n"%(np.mean(meandeviance), np.std(meandeviance, ddof=1)))
         handle.close()
 

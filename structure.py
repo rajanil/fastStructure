@@ -1,4 +1,5 @@
 import numpy as np
+#np.random.seed(10)
 import fastStructure 
 import parse_bed
 import getopt
@@ -39,6 +40,9 @@ def parseopts(opts):
 
         elif opt in ["--full"]:
             params['full'] = True
+
+        elif opt in ["--seed"]:
+            np.random.seed(int(arg))
 
     return params
 
@@ -90,7 +94,7 @@ if __name__=="__main__":
     # parse command-line options
     argv = sys.argv[1:]
     smallflags = "K:"
-    bigflags = ["prior=", "tol=", "input=", "output=", "cv=", "full"] 
+    bigflags = ["prior=", "tol=", "input=", "output=", "cv=", "seed=", "full"] 
     try:
         opts, args = getopt.getopt(argv, smallflags, bigflags)
     except getopt.GetoptError:
