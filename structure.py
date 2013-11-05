@@ -1,5 +1,5 @@
+
 import numpy as np
-#np.random.seed(10)
 import fastStructure 
 import parse_bed
 import getopt
@@ -7,6 +7,10 @@ import sys
 import os, pdb
 
 def parseopts(opts):
+
+    """
+    parses the command-line flags and options passed to the script
+    """
 
     params = {'mintol': 1e-6,
             'prior': "simple",
@@ -48,6 +52,11 @@ def parseopts(opts):
 
 def checkopts(params):
 
+    """
+    checks if some of the command-line options passed are valid.
+    In the case of invalid options, an exception is always thrown.
+    """
+
     if params['mintol']<=0:
         print "a non-positive value was provided as convergence criterion"
         raise ValueError
@@ -69,6 +78,11 @@ def checkopts(params):
         raise ValueError
     
 def write_output(Q, P, other, params):
+
+    """
+    write the posterior means and variational parameters
+    to separate output files.
+    """
 
     handle = open('%s.%d.meanQ'%(params['outputfile'],params['K']),'w')
     handle.write('\n'.join(['  '.join(['%.6f'%i for i in q]) for q in Q])+'\n')
@@ -113,6 +127,7 @@ if __name__=="__main__":
     G = parse_bed.load(params['inputfile'])
     G = np.require(G, dtype=np.uint8, requirements='C')
 
+    # run the variational algorithm
     Q, P, other = fastStructure.infer_variational_parameters(G, params['K'], \
                     params['outputfile'], params['mintol'], \
                     params['prior'], params['cv'])

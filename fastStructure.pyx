@@ -1,3 +1,4 @@
+
 import numpy as np
 cimport numpy as np
 from cpython cimport bool
@@ -22,9 +23,11 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
     totaltime = time.time()
     N = G.shape[0]
     L = G.shape[1]
+
+    # minimum number of SNPs that can resolve populations
+    # with an Fst of 0.0001, given sample size `N`
     batch_size = min([L,int(1000000/N)])
 
-    # {results, fresults, fresultsa, fresults_notsm}
     handle = open('%s.%d.log'%(outfile,K),'w')
     handle.close()
 
@@ -70,8 +73,8 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
             piG = pi.copy()
 
             # after initializing admixture proportions, initialize the allele
-            # frequency parameters for all SNPs, keeping admixture proportions fixed
-            # if the logistic prior is chosen, hyperparameter Lambda
+            # frequency parameters for all SNPs, keeping admixture proportions fixed.
+            # if the logistic prior is chosen, hyperparameter `Lambda`
             # is also kept fixed in this step.
             pi = af.AlleleFreq(L, K, prior)
             if pi.prior=='logistic':
@@ -99,13 +102,14 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
         handle = open('%s.%d.log'%(outfile,K),'a')
         handle.write("Marginal likelihood with initialization (%d) = %.10f\n"%(restart+1,E))
         handle.close()
-        # select current initialization if it is better than all previous initializations
+        # select current initialization if it has a higher marginal
+        # likelihood than all previous initializations
         if E>Estart:
             pistart = pi.copy()
             psistart = psi.copy()
             Estart = E
 
-    itertime = (time.time()-itertime)
+    itertime = time.time()-itertime
     E = Estart
     pi = pistart.copy()
     psi = psistart.copy()
@@ -147,6 +151,7 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
 
         iter += 1
 
+    # posterior mean of allele frequencies and admixture proportions
     P = pi.var_beta/(pi.var_beta+pi.var_gamma)
     Q = psi.var/utils.insum(psi.var,[1])
 
@@ -164,11 +169,36 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
         handle.write("CV error = %.7f, %.7f \n"%(np.mean(meandeviance), np.std(meandeviance, ddof=1)))
         handle.close()
 
-    other = dict([('varQ',psi.var),('varPb',pi.var_beta),('varPg',pi.var_gamma)])
+    other = dict([('varQ',psi.var), ('varPb',pi.var_beta), ('varPg',pi.var_gamma)])
 
     return Q, P, other
 
 cdef double expected_genotype(ap.AdmixProp psi, af.AlleleFreq pi, int n, int l):
+
+    """
+    compute the expected genotype of missing data, given observed genotypes, 
+    after integrating out latent variables and model parameters using
+    their variational distributions.
+
+    Arguments:
+
+        psi : instance of `AdmixProp`
+            variational distribution of admixture proprotions
+        
+        pi : instance of `AlleleFreq`
+            variational distribution of allele frequencies
+
+        n : int
+            sample index
+
+        l : int
+            SNP index
+
+    Returns:
+
+        float
+
+    """
 
     cdef np.ndarray g = np.zeros((3,),dtype=float)
     cdef np.ndarray Q, Qi, Pb, Pib, Pg, Pig, P
@@ -205,6 +235,43 @@ cdef double expected_genotype(ap.AdmixProp psi, af.AlleleFreq pi, int n, int l):
     return nu
 
 cdef np.ndarray CV(np.ndarray[np.uint8_t, ndim=2] Gtrue, ap.AdmixProp psi, af.AlleleFreq pi, int cv, double mintol):
+
+    """
+    compute the cross-validation error for a dataset, by computing the
+    model deviance on held-out subsets of the data. 
+
+    Arguments:
+
+        Gtrue : numpy.ndarray
+            array of genotypes
+    
+        psi : instance of `admixprop.AdmixProp`
+            seed for variational admixture proportion parameters
+
+        pi : instance of `allelefreq.AlleleFreq`
+            seed for variational allele frequency parameters
+
+        cv : int
+            number of folds of cross-validation
+
+        mintol : double
+            convergence criterion for the variational algorithm
+
+    Returns:
+
+        numpy.ndarray
+
+    Note:
+        Given the variational parameters estimated using the entire
+        dataset, a random subset of the genotype entries are held-out
+        and the variational algorithm is run on the remaining genotypes,
+        with the estimated parameters as the initial seed. This
+        allows for fast parameter estimation. The prediction error
+        for the held-out dataset is computed from the binomial deviance
+        of the held-out genotype entries, given the re-estimated 
+        variational parameters.
+
+    """
 
     cdef bool wellmasked = False
     cdef list nonindices, masks, newmasks, deviances

@@ -1,8 +1,11 @@
+
 import numpy as np
 cimport numpy as np
 import struct
 import sys
 
+# maps plink binary represntation of genotypes to an unsigned integer
+# missing values are coded by `3`.
 cdef dict genomap = dict([('00',0),('01',1),('11',2),('10',3)])
 
 def load(file):
@@ -29,7 +32,7 @@ def load(file):
     tobit = lambda x: ''.join([bin(i)[2:].zfill(8)[::-1] for i in struct.unpack('<%sB'%Nbytes, x)])
     genotype = np.zeros((Nindiv,Nsnp),dtype='uint8')
 
-    # open and parse the bed file
+    # open the bed file
     handle = open(file+'.bed','rb')
 
     # check if the file is a valid plink bed file
@@ -44,7 +47,8 @@ def load(file):
         print "This is not a valid bed file"
         handle.close()
         sys.exit(2)
-        
+
+    # parse the bed file        
     for l from 0 <= l < Nsnp:
         line = handle.read(Nbytes)
         bytestr = tobit(line)
