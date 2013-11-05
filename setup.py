@@ -16,7 +16,7 @@ setup(
 )
 
 # setup fastStructure
-ext_modules = [Extension("fastStructure", ["fastStructure.pyx"], library_dirs=["vars/"])]
+ext_modules = [Extension("fastStructure", ["fastStructure.pyx"])]
 
 setup(
     name = 'fastStructure',

@@ -2,7 +2,9 @@ import numpy as np
 cimport numpy as np
 from cpython cimport bool
 import utils
+import vars.allelefreq as af
 cimport vars.allelefreq as af 
+import vars.admixprop as ap
 cimport vars.admixprop as ap 
 from MargLikehood import marginal_likelihood
 import logging
