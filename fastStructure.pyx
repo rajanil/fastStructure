@@ -8,7 +8,6 @@ import vars.allelefreq as af
 cimport vars.admixprop as ap 
 import vars.admixprop as ap
 import vars.marglikehood as mlhood
-import logging
 import time
 
 def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str outfile, double mintol, str prior, int cv):
