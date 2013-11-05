@@ -26,7 +26,7 @@ def parseopts(opts):
         elif opt in ["--prior"]:
             params['prior'] = arg
 
-            if params['prior'] not in {'simple','logistic'}:
+            if params['prior'] not in ['simple','logistic']:
                 print "%s prior is not currently implemented, defaulting to the simple prior"
                 params['prior'] = 'simple'
 
@@ -100,10 +100,6 @@ if __name__=="__main__":
         checkopts(params)
     except getopt.GetoptError:
         sys.exit(2)
-
-    if params['prior'] not in ['simple','logistic']:
-        print "%s prior is not currently implemented, defaulting to the simple prior"%params['prior']
-        params['prior'] = 'simple'
 
     # load data
     G = parse_bed.load(params['inputfile'])

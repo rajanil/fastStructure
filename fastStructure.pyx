@@ -1,10 +1,10 @@
 import numpy as np
 cimport numpy as np
 from cpython cimport bool
-import vars.utils as utils
-cimport vars.allelefreq as af
-cimport vars.admixprop as ap
-from vars.MargLikehood import marginal_likelihood
+import utils
+cimport vars.allelefreq as af 
+cimport vars.admixprop as ap 
+from MargLikehood import marginal_likelihood
 import logging
 import time
 

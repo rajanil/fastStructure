@@ -17,16 +17,19 @@ setup(
 )
 
 # setup variable updates 
-ext_modules = [Extension("AdmixProp", ["admixprop.pyx", "C_admixprop.c"]), \
-               Extension("AlleleFreq", ["allelefreq.pyx", "C_allelefreq.c"], \
+ext_modules = [Extension("admixprop", ["admixprop.pyx", "C_admixprop.c"]), \
+               Extension("allelefreq", ["allelefreq.pyx", "C_allelefreq.c"], \
                 library_dirs=["/usr/local/lib/"], \
                 libraries=["gsl","gslcblas"], \
                 extra_compile_args=["-g"], extra_link_args=["-g"]), \
-               Extension("MargLikehood", ["marglikehood.pyx", "C_marglikehood.c"])]
+               Extension("marglikehood", ["marglikehood.pyx", "C_marglikehood.c"])]
 ext_modules = cythonize(ext_modules)
 
 setup(
     name = 'variables',
+    author = 'Anil Raj',
+    version = '1.0',
+    author_email = 'rajanil@stanford.edu',
     cmdclass = {'build_ext': build_ext},
     include_dirs=[numpy.get_include(), '.'],
     ext_modules = ext_modules
