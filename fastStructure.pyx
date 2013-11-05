@@ -1,12 +1,12 @@
 import numpy as np
 cimport numpy as np
 from cpython cimport bool
-import utils
-import vars.allelefreq as af
+import vars.utils as utils
 cimport vars.allelefreq as af 
-import vars.admixprop as ap
+import vars.allelefreq as af
 cimport vars.admixprop as ap 
-from MargLikehood import marginal_likelihood
+import vars.admixprop as ap
+import vars.marglikehood as mlhood
 import logging
 import time
 
@@ -52,7 +52,7 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
             psi.update(g, pi)
             # variational allele frequency update
             pi.update(g, psi)
-            E = marginal_likelihood(g, psi, pi)
+            E = mlhood.marginal_likelihood(g, psi, pi)
             reltol = np.inf
             iter = 0
             while np.abs(reltol)>mintol*10:
@@ -62,7 +62,7 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
                 pi.square_update(g, psi)
                 iter += 1
                 if iter%10==0:
-                    Enew = marginal_likelihood(g, psi, pi)
+                    Enew = mlhood.marginal_likelihood(g, psi, pi)
                     reltol = Enew - E
                     E = Enew
                     # update allele frequency hyperparameters
@@ -95,7 +95,7 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
         # compute marginal likelihood for this initialization
         psi.update(G, pi)
         pi.update(G, psi)
-        E = marginal_likelihood(G, psi, pi)
+        E = mlhood.marginal_likelihood(G, psi, pi)
         handle = open(outfile+'.log','a')
         handle.write("Marginal likelihood with initialization (%d) = %.10f\n"%(restart,E))
         handle.close()
@@ -110,7 +110,7 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
     pi = pistart.copy()
     psi = psistart.copy()
 
-    handle = open(file+'.log','a')
+    handle = open(outfile+'.log','a')
     to_write = ["Iteration", "Marginal_Likelihood", "delta_Marginal_Likelihood", "Iteration_Time"]
     handle.write(' '.join(to_write)+"\n")
     to_write = ['%d'%iter, '%.10f'%E, '--', '%.3f'%itertime]
@@ -132,12 +132,12 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
         # Compute marginal likelihood once every 10 iterations
         if (iter+1)%10==0:
 
-            E_new = marginal_likelihood(G, psi, pi)
+            E_new = mlhood.marginal_likelihood(G, psi, pi)
             reltol = E_new-E
             E = E_new
             itertime = time.time()-itertime
 
-            handle = open(file+'.txt','a')
+            handle = open(outfile+'.log','a')
             to_write = ['%d'%(iter+1), '%.10f'%E, '%.10f'%reltol, '%.3f'%itertime]
             handle.write(' '.join(to_write)+"\n")
             handle.close()
@@ -151,7 +151,7 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
     Q = psi.var/utils.insum(psi.var,[1])
 
     totaltime = time.time()-totaltime
-    handle = open(file+'.log','a')
+    handle = open(outfile+'.log','a')
     handle.write("Marginal Likelihood = %.10f\n"%E)
     handle.write("Total time = %.4f seconds\n"%totaltime)
     handle.write("Total iterations = %d \n"%iter)
@@ -160,9 +160,9 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
     # Computing cross-validation error
     if cv:
         meandeviance = CV(G, psi, pi, cv, mintol)
-    handle = open(file+'.log','a')
-    handle.write("CV error = %.7f, %.7f \n"%(np.mean(meandeviance), np.std(meandeviance, ddof=1)))
-    handle.close()
+        handle = open(outfile+'.log','a')
+        handle.write("CV error = %.7f, %.7f \n"%(np.mean(meandeviance), np.std(meandeviance, ddof=1)))
+        handle.close()
 
     other = dict([('varQ',psi.var),('varPb',pi.var_beta),('varPg',pi.var_gamma)])
 
@@ -250,7 +250,7 @@ cdef np.ndarray CV(np.ndarray[np.uint8_t, ndim=2] Gtrue, ap.AdmixProp psi, af.Al
         # restimate parameters from masked genotype matrix
         psimask = psi.copy()
         pimask = pi.copy()
-        E = marginal_likelihood(G, psi, pi)
+        E = mlhood.marginal_likelihood(G, psi, pi)
         reltol = np.inf
         iter = 0
 
@@ -266,7 +266,7 @@ cdef np.ndarray CV(np.ndarray[np.uint8_t, ndim=2] Gtrue, ap.AdmixProp psi, af.Al
             # optimize hyperparameters once every 10 iterations
             if (iter+1)%10==0:
 
-                E_new = marginal_likelihood(G, psimask, pimask)
+                E_new = mlhood.marginal_likelihood(G, psimask, pimask)
                 reltol = E_new-E
                 E = E_new
                 pimask.update_hyperparam(False)

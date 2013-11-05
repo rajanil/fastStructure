@@ -35,6 +35,6 @@ cdef class AlleleFreq:
     cdef _update_simple(self, np.ndarray[np.uint8_t, ndim=2] G, ap.AdmixProp psi)
     cdef _update_logistic(self, np.ndarray[np.uint8_t, ndim=2] G, ap.AdmixProp psi)
     cdef _unconstrained_solver(self, np.ndarray[np.float64_t, ndim=2] Dvarbeta, np.ndarray[np.float64_t, ndim=2] Dvargamma)
-    cdef update(self, np.ndarray[np.uint8_t, ndim=2] G, AlleleFreq psi)
-    cdef square_update(self, np.ndarray[np.uint8_t, ndim=2] G, AlleleFreq psi)
+    cdef update(self, np.ndarray[np.uint8_t, ndim=2] G, ap.AdmixProp psi)
+    cdef square_update(self, np.ndarray[np.uint8_t, ndim=2] G, ap.AdmixProp psi)
     cdef update_hyperparam(self, bool nolambda)

@@ -10,6 +10,7 @@ def parseopts(opts):
     params = {'mintol': 1e-6,
             'prior': "simple",
             'cv': 0,
+            'full': False
             }
 
     for opt, arg in opts:
@@ -36,47 +37,50 @@ def parseopts(opts):
         elif opt in ["--tol"]:
             params['mintol'] = float(arg)
 
+        elif opt in ["--full"]:
+            params['full'] = True
+
     return params
 
 def checkopts(params):
 
     if params['mintol']<=0:
         print "a non-positive value was provided as convergence criterion"
-        raise getopt.GetoptError
+        raise ValueError
     
     if params['cv']<0:
         print "a negative value was provided for the number of cross-validations folds"
-        raise getopt.GetoptError
+        raise ValueError
 
     if params['K']<=0:
         print "a negative value was provided for the number of populations"
-        raise getopt.GetoptError
+        raise ValueError
     
     if not params.has_key('inputfile'):
         print "an input file needs to be provided"
-        raise getopt.GetoptError
+        raise ValueError
 
     if not params.has_key('outputfile'):
         print "an output file needs to be provided"
-        raise getopt.GetoptError
+        raise ValueError
     
 def write_output(Q, P, other, params):
 
-    handle = open('%s.%d.meanQ'%(params['outfile'],params['K']),'w')
-    handle.write('\n'.join([' '.join(['%.3f'%i for i in q]) for q in Q])+'\n')
+    handle = open('%s.%d.meanQ'%(params['outputfile'],params['K']),'w')
+    handle.write('\n'.join(['  '.join(['%.6f'%i for i in q]) for q in Q])+'\n')
     handle.close()
 
-    handle = open('%s.%d.meanP'%(params['outfile'],params['K']),'w')
-    handle.write('\n'.join([' '.join(['%.3f'%i for i in p]) for p in P])+'\n')
+    handle = open('%s.%d.meanP'%(params['outputfile'],params['K']),'w')
+    handle.write('\n'.join(['  '.join(['%.6f'%i for i in p]) for p in P])+'\n')
     handle.close()
 
     if params['full']:
-        handle = open('%s.%d.varQ'%(params['outfile'],params['K']),'w')
-        handle.write('\n'.join([' '.join(['%.3f'%i for i in q]) for q in other['varQ']])+'\n')
+        handle = open('%s.%d.varQ'%(params['outputfile'],params['K']),'w')
+        handle.write('\n'.join(['  '.join(['%.6f'%i for i in q]) for q in other['varQ']])+'\n')
         handle.close()
 
-        handle = open('%s.%d.varP'%(params['outfile'],params['K']),'w')
-        handle.write('\n'.join([' '.join(['%.3f'%i for i in np.hstack((pb,pg))]) \
+        handle = open('%s.%d.varP'%(params['outputfile'],params['K']),'w')
+        handle.write('\n'.join(['  '.join(['%.6f'%i for i in np.hstack((pb,pg))]) \
             for pb,pg in zip(other['varPb'],other['varPg'])])+'\n')
         handle.close()
 
@@ -86,7 +90,7 @@ if __name__=="__main__":
     # parse command-line options
     argv = sys.argv[1:]
     smallflags = "K:"
-    bigflags = ["prior=", "tol=", "input=", "output=", "cv=", "restarts="] 
+    bigflags = ["prior=", "tol=", "input=", "output=", "cv=", "full"] 
     try:
         opts, args = getopt.getopt(argv, smallflags, bigflags)
     except getopt.GetoptError:
@@ -98,7 +102,7 @@ if __name__=="__main__":
     # check if command-line options are valid
     try:
         checkopts(params)
-    except getopt.GetoptError:
+    except ValueError:
         sys.exit(2)
 
     # load data
@@ -106,7 +110,7 @@ if __name__=="__main__":
     G = np.require(G, dtype=np.uint8, requirements='C')
 
     Q, P, other = fastStructure.infer_variational_parameters(G, params['K'], \
-                    params['inputfile'], params['mintol'], \
+                    params['outputfile'], params['mintol'], \
                     params['prior'], params['cv'])
 
     # write out inferred parameters

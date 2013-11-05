@@ -10,7 +10,7 @@ ctypedef np.uint8_t uint8_t
 cdef extern from "marglikehood.h":
     double marglikehood( uint8_t* G, double* zetabeta, double* zetagamma, double* xi, long N, long L, long K )
 
-cdef double marginal_likelihood(np.ndarray[np.uint8_t, ndim=2] G, ap.AdmixProp psi, af.AlleleFreq pi):
+def marginal_likelihood(np.ndarray[np.uint8_t, ndim=2] G, ap.AdmixProp psi, af.AlleleFreq pi):
 
     cdef double E1, E2, E3, Etotal
 

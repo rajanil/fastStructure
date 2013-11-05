@@ -21,6 +21,6 @@ ext_modules = [Extension("fastStructure", ["fastStructure.pyx"])]
 setup(
     name = 'fastStructure',
     cmdclass = {'build_ext': build_ext},
-    include_dirs=[numpy.get_include(), '.', "vars/"],
+    include_dirs=[numpy.get_include(), '.', 'vars/'],
     ext_modules = ext_modules
 )

@@ -198,7 +198,7 @@ cdef class AlleleFreq:
 
         return var_beta, var_gamma
 
-    cdef update(self, np.ndarray[np.uint8_t, ndim=2] G, AlleleFreq psi):
+    cdef update(self, np.ndarray[np.uint8_t, ndim=2] G, ap.AdmixProp psi):
 
         """
         Calls the relevant update method depending on the choice of prior.
@@ -215,7 +215,7 @@ cdef class AlleleFreq:
         elif self.prior=='logistic':
             self._update_logistic(G, psi)
 
-    cdef square_update(self, np.ndarray[np.uint8_t, ndim=2] G, AlleleFreq psi):
+    cdef square_update(self, np.ndarray[np.uint8_t, ndim=2] G, ap.AdmixProp psi):
 
         """
         Accelerated update of variational parameters of

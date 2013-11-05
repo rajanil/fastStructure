@@ -6,13 +6,13 @@ import random
 Collection of useful functions.
 """
 
-cdef double EPS = np.finfo(np.double).tiny
+EPS = np.finfo(np.double).tiny
 
 insum = lambda x,axes: np.apply_over_axes(np.sum,x,axes)
 nplog = lambda x: np.nan_to_num(np.log(x))
 OR = lambda x,y: np.logical_or(x,y)
 
-cdef outsum(np.ndarray[np.float64_t, ndim=2] arr):
+def outsum(np.ndarray[np.float64_t, ndim=2] arr):
 
     """
     Fast summation over the 0-th axis.
@@ -36,7 +36,7 @@ def random_combination(iterable, r):
     indices = sorted(random.sample(xrange(n), r))
     return tuple(pool[i] for i in indices)
 
-cdef list random_partition(list shape, list nonlst, int n):
+def random_partition(list shape, list nonlst, int n):
 
     cdef int num, d, j
     cdef double frac
