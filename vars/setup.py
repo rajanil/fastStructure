@@ -1,5 +1,6 @@
 
 from distutils.core import setup
+from Cython.Build import cythonize
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
 import numpy
@@ -16,12 +17,13 @@ setup(
 )
 
 # setup variable updates 
-ext_modules = [Extension("admixprop", ["admixprop.pyx", "admixprop.c"]), \
-       Extension("allelefreq", ["allelefreq.pyx", "allelefreq.c"], \
-        library_dirs=["/usr/local/lib/"], \
-        libraries=["gsl","gslcblas"], \
-        extra_compile_args=["-g"], extra_link_args=["-g"]),
-       Extension("marglikehood", ["marglikehood.pyx", "marglikehood.c"])]
+ext_modules = [Extension("AdmixProp", ["admixprop.pyx", "C_admixprop.c"]), \
+               Extension("AlleleFreq", ["allelefreq.pyx", "C_allelefreq.c"], \
+                library_dirs=["/usr/local/lib/"], \
+                libraries=["gsl","gslcblas"], \
+                extra_compile_args=["-g"], extra_link_args=["-g"]), \
+               Extension("MargLikehood", ["marglikehood.pyx", "C_marglikehood.c"])]
+ext_modules = cythonize(ext_modules)
 
 setup(
     name = 'variables',

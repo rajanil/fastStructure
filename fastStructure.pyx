@@ -2,13 +2,11 @@ import numpy as np
 cimport numpy as np
 from cpython cimport bool
 import vars.utils as utils
-from vars.allelefreq import AlleleFreq
-from vars.admixprop import AdmixProp
-from vars.marglikehood import marginal_likelihood
-import random
+cimport vars.allelefreq as af
+cimport vars.admixprop as ap
+from vars.MargLikehood import marginal_likelihood
 import logging
 import time
-import pdb
 
 def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str outfile, double mintol, str prior, int cv):
 
@@ -16,8 +14,8 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
     cdef double Estart, E, Enew, reltol, diff, totaltime, itertime
     cdef np.ndarray g
     cdef list indices, old, Psis, Es, Times
-    cdef AdmixProp psi, psistart
-    cdef AlleleFreq pi, pistart, piG
+    cdef ap.AdmixProp psi, psistart
+    cdef af.AlleleFreq pi, pistart, piG
 
     totaltime = time.time()
     N = G.shape[0]
@@ -46,8 +44,8 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
 
             # iterate the variational algorithm to `weak' convergence
             # to initialize parameters for admixture proportions
-            psi = AdmixProp(N, K)
-            pi = AlleleFreq(batch_size, K, G=g, prior=prior)
+            psi = ap.AdmixProp(N, K)
+            pi = af.AlleleFreq(batch_size, K, prior)
             # variational admixture proportion update
             psi.update(g, pi)
             # variational allele frequency update
@@ -73,7 +71,7 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
             # frequency parameters for all SNPs, keeping admixture proportions fixed
             # if the logistic prior is chosen, hyperparameter Lambda
             # is also kept fixed in this step.
-            pi = AlleleFreq(L, K, G=G, prior=prior)
+            pi = af.AlleleFreq(L, K, prior)
             if pi.prior=='logistic':
                 pi.Lambda = piG.Lambda.copy()
             old = [pi.var_beta.copy(), pi.var_gamma.copy()]
@@ -89,8 +87,8 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
         else:
 
             # simple initializing of variational parameters (cold start)
-            psi = AdmixProp(N,K)
-            pi = AlleleFreq(L, K, G=G, prior=prior)
+            psi = ap.AdmixProp(N,K)
+            pi = af.AlleleFreq(L, K, prior)
 
         # compute marginal likelihood for this initialization
         psi.update(G, pi)
@@ -164,9 +162,11 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
     handle.write("CV error = %.7f, %.7f \n"%(np.mean(meandeviance), np.std(meandeviance, ddof=1)))
     handle.close()
 
-    return Q, P
+    other = dict([('varQ',psi.var),('varPb',pi.var_beta),('varPg',pi.var_gamma)])
 
-cdef double expected_genotype(AdmixProp psi, AlleleFreq pi, int n, int l):
+    return Q, P, other
+
+cdef double expected_genotype(ap.AdmixProp psi, af.AlleleFreq pi, int n, int l):
 
     cdef np.ndarray g = np.zeros((3,),dtype=float)
     cdef np.ndarray Q, Qi, Pb, Pib, Pg, Pig, P
@@ -202,7 +202,7 @@ cdef double expected_genotype(AdmixProp psi, AlleleFreq pi, int n, int l):
 
     return nu
 
-cdef np.ndarray CV(np.ndarray[np.uint8_t, ndim=2] Gtrue, AdmixProp psi, AlleleFreq pi, int cv, double mintol):
+cdef np.ndarray CV(np.ndarray[np.uint8_t, ndim=2] Gtrue, ap.AdmixProp psi, af.AlleleFreq pi, int cv, double mintol):
 
     cdef bool wellmasked = False
     cdef list nonindices, masks, newmasks, deviances
@@ -210,8 +210,8 @@ cdef np.ndarray CV(np.ndarray[np.uint8_t, ndim=2] Gtrue, AdmixProp psi, AlleleFr
     cdef int i, j, n, l, m, iter, N, L
     cdef double E, E_new, reltol, deviance
     cdef np.ndarray G, Gmask, pg, meandeviance
-    cdef AdmixProp psimask
-    cdef AlleleFreq pimask
+    cdef ap.AdmixProp psimask
+    cdef af.AlleleFreq pimask
 
     N = Gtrue.shape[0]
     L = Gtrue.shape[1]

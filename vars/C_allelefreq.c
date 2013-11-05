@@ -20,21 +20,21 @@ void P_update_simple(const uint8_t* G, const double* zetabeta, const double* zet
     // loop over loci
     for (l=0; l<L; l++) {
 
-        // compute digamma functions of parameters
         for (k=0; k<K; k++) {
 
-            // initialize var_{beta,gamma}
             var_beta_tmp[k] = 0.0;
             var_gamma_tmp[k] = 0.0;
         }
 
-        // sum over samples
+        // loop over samples
         for (n=0; n<N; n++) {
 
             genotype = G[n*L+l];
+
+            // missing data do not contribute
             if (genotype!=3) {
 
-                // compute xi*theta_{beta,gamma}
+                // compute xi*zeta_{beta,gamma}
                 theta_beta_sum = 0.0;
                 theta_gamma_sum = 0.0;
                 for (k=0; k<K; k++) {
@@ -42,7 +42,7 @@ void P_update_simple(const uint8_t* G, const double* zetabeta, const double* zet
                     theta_gamma_sum += xi[n*K+k] * zetagamma[l*K+k];
                 }
 
-                // increment var_{beta,gamma}
+                // increment var_{beta,gamma}_tmp
                 for (k=0; k<K; k++) {
                     var_beta_tmp[k] += (double) genotype * xi[n*K+k] / theta_beta_sum;
                     var_gamma_tmp[k] += (double) (2-genotype) * xi[n*K+k] / theta_gamma_sum;
@@ -52,7 +52,6 @@ void P_update_simple(const uint8_t* G, const double* zetabeta, const double* zet
 
         // compute var_{beta,gamma}
         for (k=0; k<K; k++) {
-            // change `hyper` for F model
             idx = l*K+k;
             var_beta[idx] = beta[idx] + zetabeta[idx] * var_beta_tmp[k];
             var_gamma[idx] = gamma[idx] + zetagamma[idx] * var_gamma_tmp[k];
@@ -65,7 +64,12 @@ void P_update_simple(const uint8_t* G, const double* zetabeta, const double* zet
 
 void P_update_logistic(const double* Dvarbeta, const double* Dvargamma, const double* mu, const double* Lambda, double* var_beta, double* var_gamma, double mintol, long L, long K)
 {
-    // ZETABETA and ZETAGAMMA should be fixed since it is actually a component of latent variable Z that is kept fixed in this step.
+    /*
+    `Dvarbeta` and `Dvargamma` are a function of the values of `var_beta` and `var_gamma`. This
+    dependence, however, is explicit on a set of latent populations assignments which in-turn
+    depend on the variational parameters estimated at the previous step. So, the variables
+    `Dvarbeta` and `Dvargamma` do not have to be updated.
+    */
 
     long l, k, idx, numvar, update;
     long iter = 0;
@@ -75,13 +79,20 @@ void P_update_logistic(const double* Dvarbeta, const double* Dvargamma, const do
     double A, pbetagamma, pbeta, pgamma, ppbeta, ppgamma;
     double A_1, B_1, C_1, A_2, B_2, C_2;
 
+    /*
+    Iterate until succesive estimates are sufficiently similar
+    or the number of iterations exceeds 1000.
+    */
     while (tol>mintol && iter<1000) {
 
         numvar = 0;
         tol = 0.0;
+
         // loop over loci
         for (l=0; l<L; l++) {
 
+            // only update a locus, if all its variational parameters 
+            // satisfy positivity constraints.
             update = 1;
             for (k=0; k<K; k++) {
                 if (var_beta[l*K+k]<=0 || var_gamma[l*K+k]<=0) {
@@ -89,7 +100,6 @@ void P_update_logistic(const double* Dvarbeta, const double* Dvargamma, const do
                 }
             }
 
-            // only update a locus, if all its variational parameters are not at constraint boundaries.
             if (update==1) {
 
                 // loop over populations
@@ -129,6 +139,7 @@ void P_update_logistic(const double* Dvarbeta, const double* Dvargamma, const do
             }
         }
 
+        // compute convergence tolerance
         tol = 0.5*tol/numvar;
         iter += 1;
     }

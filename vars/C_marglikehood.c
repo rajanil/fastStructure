@@ -1,9 +1,6 @@
 
 #include "marglikehood.h"
 #include <math.h>
-//#include <stdio.h>
-//#include <stdlib.h>
-//#include <stdint.h>
 
 double marglikehood(const uint8_t* G, const double* zetabeta, const double* zetagamma, const double* xi, long N, long L, long K)
 {
@@ -15,11 +12,12 @@ double marglikehood(const uint8_t* G, const double* zetabeta, const double* zeta
     // loop over loci
     for (l=0; l<L; l++) {
 
-        // loop over individuals
+        // loop over samples 
         for (n=0; n<N; n++) {
 
             genotype = G[n*L+l];
 
+            // missing data do not contribute
             if (genotype!=3) {
 
                 zasum = 0.;

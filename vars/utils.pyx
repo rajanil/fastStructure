@@ -1,5 +1,6 @@
 import numpy as np
 cimport numpy as np
+import random
 
 """
 Collection of useful functions.

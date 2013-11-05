@@ -1,9 +1,6 @@
 
 #include "admixprop.h"
 #include <math.h>
-//#include <stdio.h>
-//#include <stdlib.h>
-//#include <stdint.h>
 
 void Q_update(const uint8_t* G, const double* zetabeta, const double* zetagamma, const double* xi, double* new_var, long N, long L, long K)
 {
@@ -21,6 +18,7 @@ void Q_update(const uint8_t* G, const double* zetabeta, const double* zetagamma,
             normgamma = 0.0;
             genotype = G[n*L+l];
 
+            // missing data do not contribute
             if (genotype!=3) {
 
                 // compute normalization
@@ -31,6 +29,8 @@ void Q_update(const uint8_t* G, const double* zetabeta, const double* zetagamma,
 
                 // loop over populations
                 for (k=0; k<K; k++) {
+                    
+                    // compute new estimate of variational parameters
                     new_var[n*K+k] += (((double) (2-genotype) * zetagamma[l*K+k] / normgamma) + ((double) genotype * zetabeta[l*K+k] /  normbeta)) * xi[n*K+  k];
                 }
             }
