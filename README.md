@@ -20,6 +20,9 @@ a set of Cython and pure Python scripts to load the data and run the algorithm.
 + [Scipy](http://www.scipy.org/)
 + [Cython](http://cython.org/)
 
+A number of python distributions already have these modules packaged in them. It is also
+straightforward to install them from platform-specific binary packages OR from source.
+
 ## Getting the source code
 
 To obtain the source code from github, let us assume you want to clone this repo into a
@@ -78,8 +81,8 @@ bed, bim and fam files for the dataset are all present in the same path.
 ### Main options
 
 The key options to pass to the scripts are the input file, the output file and the number of populations.
-Assuming the input file is named `genotypes.bed` (with corresponding `genotype.fam` and `genotype.bim`),
-the output file is named `genotypes_output` and the number of populations you would like is `3`, 
+Assuming the input file is named `genotypes.bed` (with corresponding `genotypes.fam` and `genotypes.bim`),
+the output file is named `genotypes_output` and the number of populations you would like is 3, 
 you can run the algorithm as follows:
 
     python structure.py -K 3 --input=genotypes --output=genotypes_output
@@ -92,7 +95,7 @@ path is provided).
 
 ## Running on test data
 
-A test simulated dataset is provided in `test/testdata.bed` with genotypes samples for
+A test simulated dataset is provided in `test/testdata.bed` with genotypes sampled for
 200 individuals at 500 SNP loci. The output files in `test/` were generated as follows:
 
     $ python structure.py -K 3 --input=test/testdata --output=testoutput_simple --full --seed=100
@@ -106,4 +109,4 @@ A test simulated dataset is provided in `test/testdata.bed` with genotypes sampl
     test/testoutput_logistic.3.meanP  test/testoutput_logistic.3.varP
 
 Executing the code with the provided test data should generate a log file identical to the ones in `test/`, 
-as final check that the source code has been downloaded and compiled correctly.
+as a final check that the source code has been downloaded and compiled correctly.
