@@ -65,17 +65,21 @@ def checkopts(params):
         print "a negative value was provided for the number of cross-validations folds"
         raise ValueError
 
+    if not params.has_key('K'):
+        print "a positive integer should be provided for number of populations"
+        raise KeyError
+
     if params['K']<=0:
         print "a negative value was provided for the number of populations"
         raise ValueError
     
     if not params.has_key('inputfile'):
         print "an input file needs to be provided"
-        raise ValueError
+        raise KeyError 
 
     if not params.has_key('outputfile'):
         print "an output file needs to be provided"
-        raise ValueError
+        raise KeyError
     
 def write_output(Q, P, other, params):
 
@@ -102,6 +106,23 @@ def write_output(Q, P, other, params):
             for pb,pg in zip(other['varPb'],other['varPg'])])+'\n')
         handle.close()
 
+def usage():
+    
+    """
+    brief description of various flags and options for this script
+    """
+    print "\nHere is how you can use this script\n"
+    print "Usage: python %s"%sys.argv[0]
+    print "\t -K <int>"
+    print "\t --input=<file>"
+    print "\t --output=<file>"
+    print "\t --tol=<float> (default: 10e-6)"
+    print "\t --prior={simple,logistic} (default: simple)"
+    print "\t --cv=<int> (default: 0)"
+    print "\t --full (to output all variational parameters)"
+    print "\t --seed=<int>"
+
+
 if __name__=="__main__":
     project_path = os.path.split(os.getcwd())[0]
 
@@ -111,8 +132,12 @@ if __name__=="__main__":
     bigflags = ["prior=", "tol=", "input=", "output=", "cv=", "seed=", "full"] 
     try:
         opts, args = getopt.getopt(argv, smallflags, bigflags)
+        if not opts:
+            usage()
+            sys.exit(2)
     except getopt.GetoptError:
-        print "Incorrect arguments passed"
+        print "Incorrect options passed"
+        usage()
         sys.exit(2)
 
     params = parseopts(opts)
@@ -120,7 +145,7 @@ if __name__=="__main__":
     # check if command-line options are valid
     try:
         checkopts(params)
-    except ValueError:
+    except (ValueError,KeyError):
         sys.exit(2)
 
     # load data
