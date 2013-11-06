@@ -6,7 +6,7 @@ This repo contains a *vars* library with definitions and methods for
 the relevant variables, and a set of scripts to load the data and run the algorithm.
 
 This document summarizes how to setup this software package, compile the C and 
-[Cython](http://cython.org/) scripts and run the algorithm on a test simulated genotype dataset.
+Cython scripts and run the algorithm on a test simulated genotype dataset.
 
 ## Parts 
 
@@ -23,8 +23,8 @@ a set of Cython and pure Python scripts to load the data and run the algorithm.
 
 A number of python distributions already have the first three modules packaged in them. It is also
 straightforward to install all these dependencies 
- (1) using various package managers for MACOSX and several Linux distributions 
- (2) from platform-specific binary packages
+ (1) using package managers for MACOSX and several Linux distributions,
+ (2) from platform-specific binary packages, and
  (3) directly from source
 
 ## Getting the source code
@@ -54,7 +54,7 @@ To compile the main cython scripts, you can do the following:
     cd ~/proj/fastStructure
     python setup.py build_ext --inplace
 
-Each setup will create some *.c and *.so (shared object) files.
+Each setup will create some .c and .so (shared object) files.
 This setup may give some warnings, which are OK. If you get errors that indicate the 
 build failed, this might be because the LD_LIBRARY_PATH, CFLAGS, LDFLAGS environment 
 variables are set incorrectly.
