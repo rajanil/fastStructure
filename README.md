@@ -61,8 +61,11 @@ To compile the main cython scripts, you can do the following:
 
 Each setup will create some .c and .so (shared object) files.
 This setup may give some warnings, which are OK. If you get errors that indicate the 
-build failed, this might be because the LD_LIBRARY_PATH, CFLAGS, LDFLAGS environment 
-variables are set incorrectly.
+build failed, this might be because the wrong compiler is being used or 
+environment variables (like LD_LIBRARY_PATH) are set incorrectly. To use a specific
+gcc compiler, you can do the following:
+
+    CC=</path/to/compiler> python setup.py build_ext --inplace
 
 ## Executing the code
 

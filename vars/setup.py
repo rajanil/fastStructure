@@ -12,7 +12,7 @@ ext_modules = [Extension("utils", ["utils.pyx"])]
 setup(
     name = 'utility functions',
     cmdclass = {'build_ext': build_ext},
-    include_dirs=[numpy.get_include(), '.', '/sw/include'],
+    include_dirs=[numpy.get_include(), '.'],
     ext_modules = ext_modules
 )
 
@@ -29,6 +29,6 @@ setup(
     version = '1.0',
     author_email = 'rajanil@stanford.edu',
     cmdclass = {'build_ext': build_ext},
-    include_dirs=[numpy.get_include(), '.', '/sw/include'],
+    include_dirs=[numpy.get_include(), '.'],
     ext_modules = ext_modules
 )
