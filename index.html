@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>fastStructure by rajanil</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/rajanil/fastStructure">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/rajanil/fastStructure/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/rajanil/fastStructure/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>fastStructure</h1>
+          <p>A variational framework for inferring population structure from SNP genotype data.</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/rajanil">rajanil</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>
+<a name="faststructure" class="anchor" href="#faststructure"><span class="octicon octicon-link"></span></a>fastStructure</h1>
+
+<p><em>fastStructure</em> is a fast algorithm for inferring population structure from large SNP genotype data. It is based on a variational Bayesian framework for posterior inference and is written in Python2.x.</p>
+
+<p>This repo contains a <em>vars</em> library with definitions and methods for the relevant variables, and a set of scripts to load the data and run the algorithm.</p>
+
+<p>This document summarizes how to setup this software package, compile the C and Cython scripts and run the algorithm on a test simulated genotype dataset.</p>
+
+<h2>
+<a name="parts" class="anchor" href="#parts"><span class="octicon octicon-link"></span></a>Parts</h2>
+
+<p>This repo has two components: a library of C and Cython scripts <em>vars</em> and a set of Cython and pure Python scripts to load the data and run the algorithm.</p>
+
+<h2>
+<a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h2>
+
+<p><em>fastStructure</em> depends on </p>
+
+<ul>
+<li><a href="http://www.numpy.org/">Numpy</a></li>
+<li><a href="http://www.scipy.org/">Scipy</a></li>
+<li><a href="http://cython.org/">Cython</a></li>
+<li><a href="http://www.gnu.org/software/gsl/">GNU Scientific Library</a></li>
+</ul><p>A number of python distributions already have the first three modules packaged in them. It is also
+straightforward to install all these dependencies 
+ (1) using package managers for MACOSX and several Linux distributions,
+ (2) from platform-specific binary packages, and
+ (3) directly from source</p>
+
+<h2>
+<a name="getting-the-source-code" class="anchor" href="#getting-the-source-code"><span class="octicon octicon-link"></span></a>Getting the source code</h2>
+
+<p>To obtain the source code from github, let us assume you want to clone this repo into a
+directory named <code>proj</code>:</p>
+
+<pre><code>mkdir ~/proj
+cd ~/proj
+git clone https://github.com/rajanil/fastStructure
+</code></pre>
+
+<p>To retrieve the latest code updates, you can do the following:</p>
+
+<pre><code>cd ~/proj/fastStructure
+git fetch
+git merge origin/master
+</code></pre>
+
+<h2>
+<a name="building-python-extensions" class="anchor" href="#building-python-extensions"><span class="octicon octicon-link"></span></a>Building Python extensions</h2>
+
+<p>To build library extensions, you can do the following:</p>
+
+<pre><code>cd ~/proj/fastStructure/vars
+python setup.py build_ext --inplace
+</code></pre>
+
+<p>To compile the main cython scripts, you can do the following:</p>
+
+<pre><code>cd ~/proj/fastStructure
+python setup.py build_ext --inplace
+</code></pre>
+
+<p>Each setup will create some .c and .so (shared object) files.
+This setup may give some warnings, which are OK. If you get errors that indicate the 
+build failed, this might be because the LD_LIBRARY_PATH, CFLAGS, LDFLAGS environment 
+variables are set incorrectly.</p>
+
+<h2>
+<a name="executing-the-code" class="anchor" href="#executing-the-code"><span class="octicon octicon-link"></span></a>Executing the code</h2>
+
+<p>The main script you will need to execute is <code>structure.py</code>. To see command-line 
+options that need to be passed to the script, you can do the following:</p>
+
+<pre><code>    $ python structure.py
+
+    Here is how you can use this script
+
+    Usage: python structure.py
+         -K &lt;int&gt;
+         --input=&lt;file&gt;
+         --output=&lt;file&gt;
+         --tol=&lt;float&gt;   (default: 10e-6)
+         --prior={simple,logistic}   (default: simple)
+         --cv=&lt;int&gt;   (default: 0)
+         --full   (to output all variational parameters)
+         --seed=&lt;int&gt;
+</code></pre>
+
+<p>The current implementation can import data from <a href="http://pngu.mgh.harvard.edu/%7Epurcell/plink/data.shtml#bed">plink bed</a> 
+format and the original Structure format. If the data are in plink format, ensure that
+bed, bim and fam files for the dataset are all present in the same path.</p>
+
+<h3>
+<a name="main-options" class="anchor" href="#main-options"><span class="octicon octicon-link"></span></a>Main options</h3>
+
+<p>The key options to pass to the scripts are the input file, the output file and the number of populations.
+Assuming the input file is named <code>genotypes.bed</code> (with corresponding <code>genotypes.fam</code> and <code>genotypes.bim</code>),
+the output file is named <code>genotypes_output</code> and the number of populations you would like is 3, 
+you can run the algorithm as follows:</p>
+
+<pre><code>    python structure.py -K 3 --input=genotypes --output=genotypes_output
+</code></pre>
+
+<p>This generates a <code>genotypes_output.3.log</code> file that tracks how the algorithm proceeds, and files
+<code>genotypes_output.3.meanQ</code> and <code>genotypes_output.3.meanP</code> containing the posterior mean of
+admixture proportions and allele frequencies, respectively. Note that input file names should
+not include suffixes (e.g., .bed) and are relative to the main project directory (unless a full
+path is provided).</p>
+
+<h2>
+<a name="running-on-test-data" class="anchor" href="#running-on-test-data"><span class="octicon octicon-link"></span></a>Running on test data</h2>
+
+<p>A test simulated dataset is provided in <code>test/testdata.bed</code> with genotypes sampled for
+200 individuals at 500 SNP loci. The output files in <code>test/</code> were generated as follows:</p>
+
+<pre><code>    $ python structure.py -K 3 --input=test/testdata --output=testoutput_simple --full --seed=100
+    $ ls test/testoutput_simple*
+    test/testoutput_simple.3.log  test/testoutput_simple.3.meanP  test/testoutput_simple.3.meanQ  
+    test/testoutput_simple.3.varP  test/testoutput_simple.3.varQ
+
+    $ python structure.py -K 3 --input=test/testdata --output=testoutput_logistic --full --seed=100 --prior=logistic
+    $ ls test/testoutput_logistic*
+    test/testoutput_logistic.3.log    test/testoutput_logistic.3.meanQ  test/testoutput_logistic.3.varQ
+    test/testoutput_logistic.3.meanP  test/testoutput_logistic.3.varP
+</code></pre>
+
+<p>Executing the code with the provided test data should generate a log file identical to the ones in <code>test/</code>, 
+as a final check that the source code has been downloaded and compiled correctly.</p>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
