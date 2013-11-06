@@ -44,6 +44,11 @@ To retrieve the latest code updates, you can do the following:
 
 ## Building Python extensions
 
+Before building python extensions, it is important to add the path for GSL
+libraries to the environment variable LD_LIBRARY_PATH. You can do this by adding the line
+`export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:</path/to/lib>` to your `.bashrc`
+file on your home directory, and then running `source ~/.bashrc`.
+
 To build library extensions, you can do the following:
 
     cd ~/proj/fastStructure/vars
