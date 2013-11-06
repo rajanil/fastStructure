@@ -93,9 +93,13 @@ python setup.py build_ext --inplace
 </code></pre>
 
 <p>Each setup will create some .c and .so (shared object) files.
-This setup may give some warnings, which are OK. If you get errors that indicate the 
-build failed, this might be because the LD_LIBRARY_PATH, CFLAGS, LDFLAGS environment 
-variables are set incorrectly.</p>
+This setup may give some warnings, which are OK. If you get errors that indicate the
+build failed, this might be because the wrong compiler is being used or
+environment variables (like LD_LIBRARY_PATH) are set incorrectly. To use a specific
+gcc compiler, you can do the following:</p>
+
+<pre><code>CC=/path/to/compiler python setup.py build_ext --inplace
+</code></pre>
 
 <h2>
 <a name="executing-the-code" class="anchor" href="#executing-the-code"><span class="octicon octicon-link"></span></a>Executing the code</h2>
@@ -103,19 +107,19 @@ variables are set incorrectly.</p>
 <p>The main script you will need to execute is <code>structure.py</code>. To see command-line 
 options that need to be passed to the script, you can do the following:</p>
 
-<pre><code>    $ python structure.py
+<pre><code>$ python structure.py
 
-    Here is how you can use this script
+Here is how you can use this script
 
-    Usage: python structure.py
-         -K &lt;int&gt;
-         --input=&lt;file&gt;
-         --output=&lt;file&gt;
-         --tol=&lt;float&gt;   (default: 10e-6)
-         --prior={simple,logistic}   (default: simple)
-         --cv=&lt;int&gt;   (default: 0)
-         --full   (to output all variational parameters)
-         --seed=&lt;int&gt;
+Usage: python structure.py
+     -K &lt;int&gt;
+     --input=&lt;file&gt;
+     --output=&lt;file&gt;
+     --tol=&lt;float&gt;   (default: 10e-6)
+     --prior={simple,logistic}   (default: simple)
+     --cv=&lt;int&gt;   (default: 0)
+     --full   (to output all variational parameters)
+     --seed=&lt;int&gt;
 </code></pre>
 
 <p>The current implementation can import data from <a href="http://pngu.mgh.harvard.edu/%7Epurcell/plink/data.shtml#bed">plink bed</a> 
@@ -130,7 +134,7 @@ Assuming the input file is named <code>genotypes.bed</code> (with corresponding 
 the output file is named <code>genotypes_output</code> and the number of populations you would like is 3, 
 you can run the algorithm as follows:</p>
 
-<pre><code>    python structure.py -K 3 --input=genotypes --output=genotypes_output
+<pre><code>python structure.py -K 3 --input=genotypes --output=genotypes_output
 </code></pre>
 
 <p>This generates a <code>genotypes_output.3.log</code> file that tracks how the algorithm proceeds, and files
@@ -145,15 +149,15 @@ path is provided).</p>
 <p>A test simulated dataset is provided in <code>test/testdata.bed</code> with genotypes sampled for
 200 individuals at 500 SNP loci. The output files in <code>test/</code> were generated as follows:</p>
 
-<pre><code>    $ python structure.py -K 3 --input=test/testdata --output=testoutput_simple --full --seed=100
-    $ ls test/testoutput_simple*
-    test/testoutput_simple.3.log  test/testoutput_simple.3.meanP  test/testoutput_simple.3.meanQ  
-    test/testoutput_simple.3.varP  test/testoutput_simple.3.varQ
+<pre><code>$ python structure.py -K 3 --input=test/testdata --output=testoutput_simple --full --seed=100
+$ ls test/testoutput_simple*
+test/testoutput_simple.3.log  test/testoutput_simple.3.meanP  test/testoutput_simple.3.meanQ  
+test/testoutput_simple.3.varP  test/testoutput_simple.3.varQ
 
-    $ python structure.py -K 3 --input=test/testdata --output=testoutput_logistic --full --seed=100 --prior=logistic
-    $ ls test/testoutput_logistic*
-    test/testoutput_logistic.3.log    test/testoutput_logistic.3.meanQ  test/testoutput_logistic.3.varQ
-    test/testoutput_logistic.3.meanP  test/testoutput_logistic.3.varP
+$ python structure.py -K 3 --input=test/testdata --output=testoutput_logistic --full --seed=100 --prior=logistic
+$ ls test/testoutput_logistic*
+test/testoutput_logistic.3.log    test/testoutput_logistic.3.meanQ  test/testoutput_logistic.3.varQ
+test/testoutput_logistic.3.meanP  test/testoutput_logistic.3.varP
 </code></pre>
 
 <p>Executing the code with the provided test data should generate a log file identical to the ones in <code>test/</code>, 
