@@ -112,6 +112,7 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
     E = Estart
     pi = pistart.copy()
     psi = psistart.copy()
+    iter = 0
 
     handle = open('%s.%d.log'%(outfile,K),'a')
     to_write = ["Iteration", "Marginal_Likelihood", "delta_Marginal_Likelihood", "Iteration_Time"]
@@ -121,7 +122,6 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
     handle.close()
 
     itertime = time.time()
-    iter = 0
     reltol = np.inf
     while np.abs(reltol)>mintol:
         # accelerated variational admixture proportion update
