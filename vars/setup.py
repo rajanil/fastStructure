@@ -19,9 +19,7 @@ setup(
 # setup variable updates 
 ext_modules = [Extension("admixprop", ["admixprop.pyx", "C_admixprop.c"]), \
                Extension("allelefreq", ["allelefreq.pyx", "C_allelefreq.c"], \
-                library_dirs=["/usr/local/lib/"], \
-                libraries=["gsl","gslcblas"], \
-                extra_compile_args=["-g"], extra_link_args=["-g"]), \
+                libraries=["gsl","gslcblas"]), \
                Extension("marglikehood", ["marglikehood.pyx", "C_marglikehood.c"])]
 ext_modules = cythonize(ext_modules)
 
