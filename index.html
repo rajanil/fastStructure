@@ -171,7 +171,7 @@ $ ls test/testoutput_logistic*
 test/testoutput_logistic.3.log    test/testoutput_logistic.3.meanQ  test/testoutput_logistic.3.varQ
 test/testoutput_logistic.3.meanP  test/testoutput_logistic.3.varP
 
-$ tail -n 3 testoutput_simple.3.log
+$ tail -n 3 test/testoutput_simple.3.log
 Marginal Likelihood = -0.9777044544
 Total time = 4.7611 seconds
 Total iterations = 160
@@ -179,7 +179,7 @@ Total iterations = 160
 
 <p>Executing the code with the provided test data should generate a log file identical to the ones in test/, 
 as a final check that the source code has been downloaded and compiled correctly. The algorithm scales 
-linearly with number os samples and number of loci; the expected runtime for a new dataset can be 
+linearly with number of samples, number of loci and value of K; the expected runtime for a new dataset can be 
 computed from the runtime in the above log file.</p>
 
 <h2>
