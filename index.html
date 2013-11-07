@@ -41,7 +41,7 @@
         <h1>
 <a name="faststructure" class="anchor" href="#faststructure"><span class="octicon octicon-link"></span></a>fastStructure</h1>
 
-<p><em>fastStructure</em> is a fast algorithm for inferring population structure from large SNP genotype data. It is based on a variational Bayesian framework for posterior inference and is written in Python. Here, we summarize how to setup this software package, compile the C and Cython scripts and run the algorithm on a test simulated genotype dataset.</p>
+<p><em>fastStructure</em> is a fast algorithm for inferring population structure from large SNP genotype data. It is based on a variational Bayesian framework for posterior inference and is written in Python2.x. Here, we summarize how to setup this software package, compile the C and Cython scripts and run the algorithm on a test simulated genotype dataset.</p>
 
 <h2>
 <a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h2>
@@ -174,6 +174,24 @@ test/testoutput_logistic.3.meanP  test/testoutput_logistic.3.varP
 
 <p>Executing the code with the provided test data should generate a log file identical to the ones in test/, 
 as a final check that the source code has been downloaded and compiled correctly.</p>
+
+<h2>
+<a name="choosing-model-complexity" class="anchor" href="#choosing-model-complexity"><span class="octicon octicon-link"></span></a>Choosing model complexity</h2>
+
+<p>In order to choose the appropriate number of model components that explain structure in the dataset,
+we recommend running the algorithm for multiple choices of K. We have provided a utility tool to parse
+through the output of these runs and provide lower and upper bounds to the model complexity 
+appropriate for this dataset.</p>
+
+Assuming the algorithm was run on the test dataset for choices of K ranging from 1 to 10, and
+the output flag was --output=test/testoutput_simple, you can obtain the model complexity bounds
+by doing the following:</p>
+
+<pre><code>$ python chooseK.py --input=test/testoutput_simple
+Model complexity that maximizes marginal likelihood = 2
+Model components used to explain structure in data = 4
+</code></pre>
+
       </section>
 
     </div>
