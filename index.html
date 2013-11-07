@@ -39,9 +39,9 @@
         </div>
 
         <h1>
-<a name="faststructure" class="anchor" href="#faststructure"><span class="octicon octicon-link"></span></a>fastStructure</h1>
+<a name="Introduction" class="anchor" href="#Introduction"><span class="octicon octicon-link"></span></a>Introduction</h1>
 
-<p><em>fastStructure</em> is a fast algorithm for inferring population structure from large SNP genotype data. It is based on a variational Bayesian framework for posterior inference and is written in Python2.x. Here, we summarize how to setup this software package, compile the C and Cython scripts and run the algorithm on a test simulated genotype dataset.</p>
+<p><em>fastStructure</em> is an algorithm for inferring population structure from large SNP genotype data. It is based on a variational Bayesian framework for posterior inference and is written in Python2.x. Here, we summarize how to setup this software package, compile the C and Cython scripts and run the algorithm on a test simulated genotype dataset.</p>
 
 <h2>
 <a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h2>
@@ -130,6 +130,7 @@ Usage: python structure.py
      --tol=&lt;float&gt;   (default: 10e-6)
      --prior={simple,logistic}   (default: simple)
      --cv=&lt;int&gt;   (default: 0)
+     --format={bed,str} (default: bed)
      --full   (to output all variational parameters)
      --seed=&lt;int&gt;
 </code></pre>
@@ -172,7 +173,7 @@ test/testoutput_logistic.3.log    test/testoutput_logistic.3.meanQ  test/testout
 test/testoutput_logistic.3.meanP  test/testoutput_logistic.3.varP
 
 $ tail -n 3 test/testoutput_simple.3.log
-Marginal Likelihood = -0.9777044544
+Marginal Likelihood (avg over genotypes) = -0.9777044544
 Total time = 4.7611 seconds
 Total iterations = 160
 </code></pre>
