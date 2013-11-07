@@ -63,7 +63,7 @@ straightforward to install all these dependencies
 <a name="getting-the-source-code" class="anchor" href="#getting-the-source-code"><span class="octicon octicon-link"></span></a>Getting the source code</h2>
 
 <p>To obtain the source code from github, let us assume you want to clone this repo into a
-directory named <code>proj</code>:</p>
+directory named proj:</p>
 
 <pre><code>mkdir ~/proj
 cd ~/proj
@@ -84,6 +84,13 @@ git merge origin/master
 
 <h2>
 <a name="building-python-extensions" class="anchor" href="#building-python-extensions"><span class="octicon octicon-link"></span></a>Building Python extensions</h2>
+
+<p>Before building python extensions, it is important to add the path for GSL
+libraries to the environment variable LD_LIBRARY_PATH. For a default installation
+of GSL, this path is usually /usr/local/lib. You can do this by adding the following line
+to your .bashrc file on your home directory, and then running <code>source ~/.bashrc</code>.</p>
+
+<pre><code>export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/path/to/lib</code></pre>
 
 <p>To build library extensions, you can do the following:</p>
 
@@ -109,7 +116,7 @@ gcc compiler, you can do the following:</p>
 <h2>
 <a name="executing-the-code" class="anchor" href="#executing-the-code"><span class="octicon octicon-link"></span></a>Executing the code</h2>
 
-<p>The main script you will need to execute is <code>structure.py</code>. To see command-line 
+<p>The main script you will need to execute is structure.py. To see command-line 
 options that need to be passed to the script, you can do the following:</p>
 
 <pre><code>$ python structure.py
@@ -135,15 +142,15 @@ bed, bim and fam files for the dataset are all present in the same path.</p>
 <a name="main-options" class="anchor" href="#main-options"><span class="octicon octicon-link"></span></a>Main options</h3>
 
 <p>The key options to pass to the scripts are the input file, the output file and the number of populations.
-Assuming the input file is named <code>genotypes.bed</code> (with corresponding <code>genotypes.fam</code> and <code>genotypes.bim</code>),
-the output file is named <code>genotypes_output</code> and the number of populations you would like is 3, 
+Assuming the input file is named genotypes.bed (with corresponding genotypes.fam and genotypes.bim),
+the output file is named <i>genotypes_output</i> and the number of populations you would like is 3, 
 you can run the algorithm as follows:</p>
 
 <pre><code>python structure.py -K 3 --input=genotypes --output=genotypes_output
 </code></pre>
 
-<p>This generates a <code>genotypes_output.3.log</code> file that tracks how the algorithm proceeds, and files
-<code>genotypes_output.3.meanQ</code> and <code>genotypes_output.3.meanP</code> containing the posterior mean of
+<p>This generates a genotypes_output.3.log file that tracks how the algorithm proceeds, and files
+genotypes_output.3.meanQ and genotypes_output.3.meanP containing the posterior mean of
 admixture proportions and allele frequencies, respectively. Note that input file names should
 not include suffixes (e.g., .bed) and are relative to the main project directory (unless a full
 path is provided).</p>
@@ -151,8 +158,8 @@ path is provided).</p>
 <h2>
 <a name="running-on-test-data" class="anchor" href="#running-on-test-data"><span class="octicon octicon-link"></span></a>Running on test data</h2>
 
-<p>A test simulated dataset is provided in <code>test/testdata.bed</code> with genotypes sampled for
-200 individuals at 500 SNP loci. The output files in <code>test/</code> were generated as follows:</p>
+<p>A test simulated dataset is provided in test/testdata.bed with genotypes sampled for
+200 individuals at 500 SNP loci. The output files in test/ were generated as follows:</p>
 
 <pre><code>$ python structure.py -K 3 --input=test/testdata --output=testoutput_simple --full --seed=100
 $ ls test/testoutput_simple*
@@ -165,7 +172,7 @@ test/testoutput_logistic.3.log    test/testoutput_logistic.3.meanQ  test/testout
 test/testoutput_logistic.3.meanP  test/testoutput_logistic.3.varP
 </code></pre>
 
-<p>Executing the code with the provided test data should generate a log file identical to the ones in <code>test/</code>, 
+<p>Executing the code with the provided test data should generate a log file identical to the ones in test/, 
 as a final check that the source code has been downloaded and compiled correctly.</p>
       </section>
 
