@@ -171,23 +171,16 @@ $ ls test/testoutput_logistic*
 test/testoutput_logistic.3.log    test/testoutput_logistic.3.meanQ  test/testoutput_logistic.3.varQ
 test/testoutput_logistic.3.meanP  test/testoutput_logistic.3.varP
 
-$ head test/testoutput_simple.3.log
-Marginal likelihood with initialization (1) = -1.0145904939
-Marginal likelihood with initialization (2) = -1.0145892585
-Marginal likelihood with initialization (3) = -1.0145899475
-Marginal likelihood with initialization (4) = -1.0145879582
-Marginal likelihood with initialization (5) = -1.0145914415
-Iteration Marginal_Likelihood delta_Marginal_Likelihood Iteration_Time (secs)
-0 -1.0145879582 -- 0.148
-10 -0.9830845002 0.0315034580 0.285
-20 -0.9795209736 0.0035635266 0.285
-30 -0.9786700505 0.0008509231 0.286
+$ tail -n 3 testoutput_simple.3.log
+Marginal Likelihood = -0.9777044544
+Total time = 4.7611 seconds
+Total iterations = 160
 </code></pre>
 
 <p>Executing the code with the provided test data should generate a log file identical to the ones in test/, 
 as a final check that the source code has been downloaded and compiled correctly. The algorithm scales 
 linearly with number os samples and number of loci; the expected runtime for a new dataset can be 
-computed from the runtimes in the above log file.</p>
+computed from the runtime in the above log file.</p>
 
 <h2>
 <a name="choosing-model-complexity" class="anchor" href="#choosing-model-complexity"><span class="octicon octicon-link"></span></a>Choosing model complexity</h2>
