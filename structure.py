@@ -5,7 +5,7 @@ import parse_bed
 import parse_str
 import getopt
 import sys
-import os, pdb
+import pdb
 
 def parseopts(opts):
 
@@ -120,6 +120,7 @@ def usage():
     """
     brief description of various flags and options for this script
     """
+
     print "\nHere is how you can use this script\n"
     print "Usage: python %s"%sys.argv[0]
     print "\t -K <int>"
@@ -134,7 +135,6 @@ def usage():
 
 
 if __name__=="__main__":
-    project_path = os.path.split(os.getcwd())[0]
 
     # parse command-line options
     argv = sys.argv[1:]
