@@ -115,7 +115,7 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
     iter = 0
 
     handle = open('%s.%d.log'%(outfile,K),'a')
-    to_write = ["Iteration", "Marginal_Likelihood", "delta_Marginal_Likelihood", "Iteration_Time"]
+    to_write = ["Iteration", "Marginal_Likelihood", "delta_Marginal_Likelihood", "Iteration_Time (secs)"]
     handle.write(' '.join(to_write)+"\n")
     to_write = ['%d'%iter, '%.10f'%E, '--', '%.3f'%itertime]
     handle.write(' '.join(to_write)+"\n")
