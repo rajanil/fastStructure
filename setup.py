@@ -15,6 +15,16 @@ setup(
     ext_modules = ext_modules
 )
 
+# setup structure format parser
+ext_modules = [Extension("parse_str", ["parse_str.pyx"])]
+
+setup(
+    name = 'parse_str',
+    cmdclass = {'build_ext': build_ext},
+    include_dirs=[numpy.get_include(), '.'],
+    ext_modules = ext_modules
+)
+
 # setup fastStructure
 ext_modules = [Extension("fastStructure", ["fastStructure.pyx"])]
 

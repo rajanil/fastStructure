@@ -2,6 +2,7 @@
 import numpy as np
 import fastStructure 
 import parse_bed
+import parse_str
 import getopt
 import sys
 import os, pdb
@@ -15,7 +16,8 @@ def parseopts(opts):
     params = {'mintol': 1e-6,
             'prior': "simple",
             'cv': 0,
-            'full': False
+            'full': False,
+            'format': 'bed'
             }
 
     for opt, arg in opts:
@@ -35,6 +37,9 @@ def parseopts(opts):
             if params['prior'] not in ['simple','logistic']:
                 print "%s prior is not currently implemented, defaulting to the simple prior"
                 params['prior'] = 'simple'
+
+        elif opt in ["--format"]:
+            params['format'] = arg
 
         elif opt in ["--cv"]:
             params['cv'] = int(arg)
@@ -68,6 +73,10 @@ def checkopts(params):
     if not params.has_key('K'):
         print "a positive integer should be provided for number of populations"
         raise KeyError
+
+    if params['format'] not in ['bed','str']:
+        print "%s data format is not currently implemented"
+        raise ValueError
 
     if params['K']<=0:
         print "a negative value was provided for the number of populations"
@@ -119,8 +128,9 @@ def usage():
     print "\t --tol=<float> (default: 10e-6)"
     print "\t --prior={simple,logistic} (default: simple)"
     print "\t --cv=<int> (default: 0)"
-    print "\t --full (to output all variational parameters)"
-    print "\t --seed=<int>"
+    print "\t --format={bed,str} (default: bed)"
+    print "\t --full (to output all variational parameters; optional)"
+    print "\t --seed=<int> (optional)"
 
 
 if __name__=="__main__":
@@ -129,7 +139,7 @@ if __name__=="__main__":
     # parse command-line options
     argv = sys.argv[1:]
     smallflags = "K:"
-    bigflags = ["prior=", "tol=", "input=", "output=", "cv=", "seed=", "full"] 
+    bigflags = ["prior=", "tol=", "input=", "output=", "cv=", "seed=", "format=", "full"] 
     try:
         opts, args = getopt.getopt(argv, smallflags, bigflags)
         if not opts:
@@ -149,8 +159,12 @@ if __name__=="__main__":
         sys.exit(2)
 
     # load data
-    G = parse_bed.load(params['inputfile'])
+    if params['format']=='bed':
+        G = parse_bed.load(params['inputfile'])
+    elif params['format']=='str':
+        G = parse_str.load(params['inputfile'])
     G = np.require(G, dtype=np.uint8, requirements='C')
+    pdb.set_trace()
 
     # run the variational algorithm
     Q, P, other = fastStructure.infer_variational_parameters(G, params['K'], \
