@@ -188,11 +188,11 @@ computed from the runtime in the above log file.</p>
 
 <p>In order to choose the appropriate number of model components that explain structure in the dataset,
 we recommend running the algorithm for multiple choices of K. We have provided a utility tool to parse
-through the output of these runs and provide lower and upper bounds to the model complexity 
+through the output of these runs and provide a reasonable range of values for the model complexity 
 appropriate for this dataset.</p>
 
 Assuming the algorithm was run on the test dataset for choices of K ranging from 1 to 10, and
-the output flag was --output=test/testoutput_simple, you can obtain the model complexity bounds
+the output flag was --output=test/testoutput_simple, you can obtain the model complexity 
 by doing the following:</p>
 
 <pre><code>$ python chooseK.py --input=test/testoutput_simple
