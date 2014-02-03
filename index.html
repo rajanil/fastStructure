@@ -135,9 +135,12 @@ Usage: python structure.py
      --seed=&lt;int&gt;
 </code></pre>
 
-<p>The current implementation can import data from <a href="http://pngu.mgh.harvard.edu/%7Epurcell/plink/data.shtml#bed">plink bed</a> 
-format and the original Structure format. If the data are in plink format, ensure that
-bed, bim and fam files for the dataset are all present in the same path.</p>
+
+<p>fastStructure performs inference for the simplest, independent-loci, admixture model, with two choices of priors 
+that can be specified using the `--prior` flag. Thus, unlike Structure, fastStructure does not require the 
+`mainparams' and `extraparam' files. The inference algorithm used by fastStructure is fundamentally different from
+that of Structure and requires the setting of far fewer options. All options for fastStructure can be passed 
+via the flags listed above.</p>
 
 <h3>
 <a name="main-options" class="anchor" href="#main-options"><span class="octicon octicon-link"></span></a>Main options</h3>
@@ -155,6 +158,20 @@ genotypes_output.3.meanQ and genotypes_output.3.meanP containing the posterior m
 admixture proportions and allele frequencies, respectively. Note that input file names should
 not include suffixes (e.g., .bed) and are relative to the main project directory (unless a full
 path is provided).</p>
+
+<h3>
+<a name="input-data-format" class="anchor" href="#input-data-format"><span class="octicon octicon-link"></span></a>Input data format</h3>
+
+<p>The current implementation can import data from <a href="http://pngu.mgh.harvard.edu/%7Epurcell/plink/data.shtml#bed">plink bed</a>
+format and the original Structure format. If the data are in plink format, ensure that
+bed, bim and fam files for the dataset are all present in the same path.</p>
+
+<p>While the original Structure program allowed for a more flexible input format, fastStructure expects a more
+specific `structure input format'. Specifically, rows in the data file correspond to samples, with two rows per sample
+(note that only diploids are handled by this software), and columns correspond to SNPs. The first 6 columns
+of the file will be ignored; these typically would include IDs, metadata, etc. This software only 
+handles bi-allelic loci. The two alleles at each locus can be encoded as desired; however, missing data 
+should be encoded as `-9'. 
 
 <h2>
 <a name="running-on-test-data" class="anchor" href="#running-on-test-data"><span class="octicon octicon-link"></span></a>Running on test data</h2>
