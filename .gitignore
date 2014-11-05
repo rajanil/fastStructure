@@ -3,3 +3,25 @@
 
 # C object files and shared libraries
 *.so
+
+# Temp files
+**/*~
+
+# Temp files
+**/*\#*
+build/
+build_and_run_test.sh
+fastStructure.c
+parse_bed.c
+parse_str.c
+testoutput_simple.3.log
+testoutput_simple.3.meanP
+testoutput_simple.3.meanQ
+testoutput_simple.3.varP
+testoutput_simple.3.varQ
+testoutput_simple.3.xi
+vars/admixprop.c
+vars/allelefreq.c
+vars/build/
+vars/marglikehood.c
+vars/utils.c

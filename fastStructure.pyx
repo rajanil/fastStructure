@@ -151,8 +151,8 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
         iter += 1
 
     # posterior mean of allele frequencies and admixture proportions
-    P = pi.var_beta/(pi.var_beta+pi.var_gamma)
-    Q = psi.var/utils.insum(psi.var,[1])
+    P = pi.var_beta / (pi.var_beta + pi.var_gamma)
+    Q = psi.var / utils.insum(psi.var, [1])
 
     totaltime = time.time()-totaltime
     handle = open('%s.%d.log'%(outfile,K),'a')
@@ -168,7 +168,10 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
         handle.write("CV error = %.7f, %.7f \n"%(np.mean(meandeviance), np.std(meandeviance, ddof=1)))
         handle.close()
 
-    other = dict([('varQ',psi.var), ('varPb',pi.var_beta), ('varPg',pi.var_gamma)])
+    other = dict([('varQ', psi.var),
+                  ('varPb', pi.var_beta),
+                  ('varPg', pi.var_gamma),
+                  ('xi', psi.xi) ])
 
     return Q, P, other
 

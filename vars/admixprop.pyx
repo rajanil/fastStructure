@@ -124,7 +124,7 @@ cdef class AdmixProp:
             else:
                 a_ok = True
 
-        # if this accelerated step fails for some reason, stick with the first non-accelerated step.
+        # if this accelerated step fails for some reason, stick with the first non-accelerated step
         if np.isnan(self.var).any():
             self.var = self.oldvar[1]
 
