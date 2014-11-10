@@ -119,7 +119,6 @@ def write_output(Q, P, other, params):
         handle.write('\n'.join(['  '.join(['%.6f'%i for i in q]) for q in other['xi']])+'\n')
         handle.close()
 
-
 def usage():
     
     """

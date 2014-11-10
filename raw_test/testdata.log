@@ -1,0 +1,44 @@
+
+@----------------------------------------------------------@
+|        PLINK!       |     v1.07      |   10/Aug/2009     |
+|----------------------------------------------------------|
+|  (C) 2009 Shaun Purcell, GNU General Public License, v2  |
+|----------------------------------------------------------|
+|  For documentation, citation & bug-report instructions:  |
+|        http://pngu.mgh.harvard.edu/purcell/plink/        |
+@----------------------------------------------------------@
+
+Skipping web check... [ --noweb ] 
+Writing this text to log file [ raw_test/testdata.log ]
+Analysis started: Mon Nov 10 15:33:46 2014
+
+Options in effect:
+	--bfile test/testdata
+	--recode
+	--out raw_test/testdata
+	--noweb
+
+Reading map (extended format) from [ test/testdata.bim ] 
+500 markers to be included from [ test/testdata.bim ]
+Reading pedigree information from [ test/testdata.fam ] 
+200 individuals read from [ test/testdata.fam ] 
+0 individuals with nonmissing phenotypes
+Assuming a disease phenotype (1=unaff, 2=aff, 0=miss)
+Missing phenotype value is also -9
+0 cases, 0 controls and 200 missing
+200 males, 0 females, and 0 of unspecified sex
+Reading genotype bitfile from [ test/testdata.bed ] 
+Detected that binary PED file is v1.00 SNP-major mode
+Before frequency and genotyping pruning, there are 500 SNPs
+1 founders and 199 non-founders found
+Total genotyping rate in remaining individuals is 1
+0 SNPs failed missingness test ( GENO > 1 )
+0 SNPs failed frequency test ( MAF < 0 )
+After frequency and genotyping pruning, there are 500 SNPs
+After filtering, 0 cases, 0 controls and 200 missing
+After filtering, 200 males, 0 females, and 0 of unspecified sex
+Writing recoded ped file to [ raw_test/testdata.ped ] 
+Writing new map file to [ raw_test/testdata.map ] 
+
+Analysis finished: Mon Nov 10 15:33:46 2014
+

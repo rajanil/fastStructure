@@ -1,0 +1,48 @@
+http://pngu.mgh.harvard.edu/~purcell/plink/data.shtml
+Binary PED files
+To save space and time, you can make a binary ped file (*.bed). This will store the pedigree/phenotype
+information in separate file (*.fam) and create an extended MAP file (*.bim) (which contains information
+about the allele names, which would otherwise be lost in the BED file).
+ 
+plink.bed      ( binary file, genotype information )
+plink.fam      ( first six columns of mydata.ped ) 
+plink.bim      ( extended MAP file: two extra cols = allele names)
+
+bed = binary ped
+fam = pedigree information from ped (plain text)
+bim = map file
+
+###################
+ped file:
+The PED file is a white-space (space or tab) delimited file: the first six columns are mandatory:
+     Family ID
+     Individual ID
+     Paternal ID
+     Maternal ID
+     Sex (1=male; 2=female; other=unknown)
+     Phenotype
+
+Genotypes (column 7 onwards) should also be white-space delimited;
+they can be any character (e.g. 1,2,3,4 or A,C,G,T or anything else)
+except 0 which is, by default, the missing genotype character. All
+markers should be biallelic. All SNPs (whether haploid or not) must
+have two alleles specified. Either Both alleles should be missing
+(i.e. 0) or neither. No header row should be given. For example, here
+are two individuals typed for 3 SNPs (one row = one person):
+
+     FAM001  1  0 0  1  2  A A  G G  A C 
+     FAM001  2  0 0  1  2  A A  A G  0 0 
+
+###################
+map file:
+By default, each line of the MAP file describes a single marker
+and must contain exactly 4 columns:
+     chromosome (1-22, X, Y or 0 if unplaced)
+     rs# or snp identifier
+     Genetic distance (morgans)
+     Base-pair position (bp units)
+
+###################
+To unencode files:
+plink --bfile mydata --recode --out mynewdata
+

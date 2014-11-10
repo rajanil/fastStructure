@@ -1,0 +1,22 @@
+
+@----------------------------------------------------------@
+|        PLINK!       |     v1.07      |   10/Aug/2009     |
+|----------------------------------------------------------|
+|  (C) 2009 Shaun Purcell, GNU General Public License, v2  |
+|----------------------------------------------------------|
+|  For documentation, citation & bug-report instructions:  |
+|        http://pngu.mgh.harvard.edu/purcell/plink/        |
+@----------------------------------------------------------@
+
+Skipping web check... [ --noweb ] 
+Writing this text to log file [ raw_test/test.log ]
+Analysis started: Mon Nov 10 15:33:31 2014
+
+Options in effect:
+	--bfile test/test
+	--recode
+	--out raw_test/test
+	--noweb
+
+
+ERROR: No file [ test/test.fam ] exists.
