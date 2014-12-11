@@ -44,6 +44,15 @@
 <p><em>fastStructure</em> is an algorithm for <a href="http://biorxiv.org/content/early/2013/12/02/001073">inferring population structure from large SNP genotype data</a>. It is based on a variational Bayesian framework for posterior inference and is written in Python2.x. Here, we summarize how to setup this software package, compile the C and Cython scripts and run the algorithm on a test simulated genotype dataset.</p>
 
 <h2>
+<a name="citation" class="anchor" href="#citation"><span class="octicon octicon-link"></span></a>Citation</h2>
+
+<p> Anil Raj, Matthew Stephens, and Jonathan K. Pritchard. 
+<em>fastSTRUCTURE: Variational Inference of Population Structure in Large SNP Data Sets </em>,
+(Genetics) June 2014 197:573-589
+[<a href="www.genetics.org/content/197/2/573.full">Genetics</a>, 
+<a href="biorxiv.org/content/early/2013/12/02/001073">Biorxiv</a>] </p>
+
+<h2>
 <a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h2>
 
 <p><em>fastStructure</em> depends on </p>
@@ -124,15 +133,15 @@ options that need to be passed to the script, you can do the following:</p>
 Here is how you can use this script
 
 Usage: python structure.py
-     -K &lt;int&gt;
-     --input=&lt;file&gt;
-     --output=&lt;file&gt;
-     --tol=&lt;float&gt;   (default: 10e-6)
-     --prior={simple,logistic}   (default: simple)
-     --cv=&lt;int&gt;   (default: 0)
-     --format={bed,str} (default: bed)
-     --full   (to output all variational parameters)
-     --seed=&lt;int&gt;
+     -K &lt;int&gt;   (number of populations)
+     --input=&lt;file&gt;   (/path/to/input/file)
+     --output=&lt;file&gt;   (/path/to/output/file)
+     --tol=&lt;float&gt;   (convergence criterion; default: 10e-6)
+     --prior={simple,logistic}   (choice of prior; default: simple)
+     --cv=&lt;int&gt;   (number of test sets for cross-validation, 0 implies no CV step; default: 0)
+     --format={bed,str} (format of input file; default: bed)
+     --full   (to output all variational parameters; optional)
+     --seed=&lt;int&gt;   (manually specify seed for random number generator; optional)
 </code></pre>
 
 
@@ -155,7 +164,9 @@ you can run the algorithm as follows:</p>
 
 <p>This generates a genotypes_output.3.log file that tracks how the algorithm proceeds, and files
 genotypes_output.3.meanQ and genotypes_output.3.meanP containing the posterior mean of
-admixture proportions and allele frequencies, respectively. Note that input file names should
+admixture proportions and allele frequencies, respectively. The orders of samples and 
+SNPs in the output files
+match those in the `.fam` file and `.bim` file, respectively. Note that input file names should
 not include suffixes (e.g., .bed) and are relative to the main project directory (unless a full
 path is provided).</p>
 
