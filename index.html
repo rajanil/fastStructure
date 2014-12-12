@@ -27,6 +27,16 @@
     ga('create', 'UA-57610622-1', 'auto');
     ga('send', 'pageview');
 
+    $('#header .fork').on('click', function() {
+      ga('send', 'event', 'button', 'click', 'fork');
+    });
+    $('#header .zip').on('click', function() {
+      ga('send', 'event', 'button', 'click', 'zip');
+    });
+    $('#header .tar').on('click', function() {
+      ga('send', 'event', 'button', 'click', 'tar');
+    });
+
   </script>
 
 
@@ -34,8 +44,8 @@
       <div id="header">
         <nav>
           <li class="fork"><a href="https://github.com/rajanil/fastStructure">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/rajanil/fastStructure/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/rajanil/fastStructure/tarball/master">TAR</a></li>
+          <li class="downloads zip"><a href="https://github.com/rajanil/fastStructure/zipball/master">ZIP</a></li>
+          <li class="downloads tar"><a href="https://github.com/rajanil/fastStructure/tarball/master">TAR</a></li>
           <li class="title">DOWNLOADS</li>
         </nav>
       </div><!-- end header -->
