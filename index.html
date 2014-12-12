@@ -254,6 +254,36 @@ Model complexity that maximizes marginal likelihood = 2
 Model components used to explain structure in data = 4
 </code></pre>
 
+<h2>
+<a name="visualizing-admixture-proportions" class="anchor" href="#visualizing-admixture-proportions"><span class="octicon octicon-link"></span></a>Visualizing admixture proportions</h2>
+
+<p>In order to visualize the expected admixture proportions inferred by fastStructure, we have
+provided a simple tool to generate Distruct plots using the mean of the variational
+posterior distribution over admixture proportions. The samples in the plot will be grouped
+according to population labels inferred by fastStructure. However, if the user would like to
+group the samples according to some other categorical label (e.g., geographic location), these labels
+can be provided as a separate file using the flag --popfile. The order of labels in this file (one label per row)
+should match the order of samples in the input data files.</p>
+
+<pre><code>$ python distruct.py
+
+Here is how you can use this script
+
+Usage: python distruct.py
+     -K &lt;int&gt;  (number of populations)
+     --input=&lt;file&gt;  (/path/to/input/file; same as output flag passed to structure.py)
+     --output=&lt;file&gt;   (/path/to/output/file)
+     --popfile=&lt;file&gt;  (file with known categorical labels; optional)
+     --title=&lt;figure title&gt;  (a title for the figure; optional)
+</code></pre>
+
+Assuming the algorithm was run on the test dataset for K=5, and
+the output flag was --output=test/testoutput_simple, you can generate a Distruct plot
+by doing the following:</p>
+
+<pre><code>$ python distruct.py -K 5 --input=test/testoutput_simple --output=test/testoutput_simple_distruct.svg
+</code></pre>
+
       </section>
 
     </div>
