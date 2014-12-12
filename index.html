@@ -26,16 +26,19 @@
 
     ga('create', 'UA-57610622-1', 'auto');
     ga('send', 'pageview');
-
-    $('#header .fork').on('click', function() {
-      ga('send', 'event', 'button', 'click', 'fork');
+    
+    $( document ).ready(function() {
+      $('#header .fork').on('click', function() {
+        ga('send', 'event', 'button', 'click', 'fork');
+      });
+      $('#header .zip').on('click', function() {
+        ga('send', 'event', 'button', 'click', 'zip');
+      });
+      $('#header .tar').on('click', function() {
+        ga('send', 'event', 'button', 'click', 'tar');
+      });
     });
-    $('#header .zip').on('click', function() {
-      ga('send', 'event', 'button', 'click', 'zip');
-    });
-    $('#header .tar').on('click', function() {
-      ga('send', 'event', 'button', 'click', 'tar');
-    });
+  
 
   </script>
 
