@@ -79,13 +79,14 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
             if pi.prior=='logistic':
                 pi.Lambda = piG.Lambda.copy()
             old = [pi.var_beta.copy(), pi.var_gamma.copy()]
-            diff = np.inf
-            while diff>1e-1:
+            #diff = np.inf
+            #while diff>1e-1:
+            for j in xrange(5):
                 # accelerated variational allele frequency update
                 pi.square_update(G, psi)
-                diff = np.mean(np.abs(pi.var_beta-old[0])+np.abs(pi.var_gamma-old[1]))
-                old = [pi.var_beta.copy(), pi.var_gamma.copy()]
-                # update allele frequency hyperparameters
+                #diff = np.mean(np.abs(pi.var_beta-old[0])+np.abs(pi.var_gamma-old[1]))
+                #old = [pi.var_beta.copy(), pi.var_gamma.copy()]
+                # Do NOT update lambda; update remaining allele frequency hyperparameters
                 pi.update_hyperparam(True)
 
         else:
@@ -128,7 +129,7 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K, str ou
         psi.square_update(G, pi)
         psi.update(G, pi)
 
-        # accelearted variational allele frequency update
+        # accelerated variational allele frequency update
         pi.square_update(G, psi)
         pi.update(G, psi)
 

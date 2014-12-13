@@ -17,10 +17,11 @@ setup(
 )
 
 # setup variable updates 
-ext_modules = [Extension("admixprop", ["admixprop.pyx", "C_admixprop.c"]), \
-               Extension("allelefreq", ["allelefreq.pyx", "C_allelefreq.c"], \
-                libraries=["gsl","gslcblas"]), \
-               Extension("marglikehood", ["marglikehood.pyx", "C_marglikehood.c"])]
+ext_modules = [Extension("admixprop", sources=["admixprop.pyx", "C_admixprop.c"]),
+               Extension("allelefreq", sources=["allelefreq.pyx", "C_allelefreq.c"],
+                libraries=["gsl","gslcblas"],
+                extra_compile_args=["-O3"]),
+               Extension("marglikehood", sources=["marglikehood.pyx", "C_marglikehood.c"])]
 ext_modules = cythonize(ext_modules)
 
 setup(
