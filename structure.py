@@ -3,9 +3,15 @@ import numpy as np
 import fastStructure 
 import parse_bed
 import parse_str
+import random
 import getopt
 import sys
 import pdb
+import warnings
+
+# ignore warnings with these expressions
+warnings.filterwarnings('ignore', '.*divide by zero.*',)
+warnings.filterwarnings('ignore', '.*invalid value.*',)
 
 def parseopts(opts):
 
@@ -52,6 +58,7 @@ def parseopts(opts):
 
         elif opt in ["--seed"]:
             np.random.seed(int(arg))
+            random.seed(int(arg))
 
     return params
 
@@ -123,15 +130,15 @@ def usage():
 
     print "\nHere is how you can use this script\n"
     print "Usage: python %s"%sys.argv[0]
-    print "\t -K <int>"
-    print "\t --input=<file>"
-    print "\t --output=<file>"
-    print "\t --tol=<float> (default: 10e-6)"
-    print "\t --prior={simple,logistic} (default: simple)"
-    print "\t --cv=<int> (default: 0)"
-    print "\t --format={bed,str} (default: bed)"
+    print "\t -K <int> (number of populations)"
+    print "\t --input=<file> (/path/to/input/file)"
+    print "\t --output=<file> (/path/to/output/file)"
+    print "\t --tol=<float> (convergence criterion; default: 10e-6)"
+    print "\t --prior={simple,logistic} (choice of prior; default: simple)"
+    print "\t --cv=<int> (number of test sets for cross-validation, 0 implies no CV step; default: 0)"
+    print "\t --format={bed,str} (format of input file; default: bed)"
     print "\t --full (to output all variational parameters; optional)"
-    print "\t --seed=<int> (optional)"
+    print "\t --seed=<int> (manually specify seed for random number generator; optional)"
 
 
 if __name__=="__main__":

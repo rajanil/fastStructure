@@ -45,11 +45,12 @@ def plot_admixture(admixture, population_indices, population_labels, title):
 
     for p,popname in enumerate(population_labels):
         indices = np.where(population_indices==p)[0]
-        vline_pos = (indices.max()+1)*indiv_width 
-        subplot.axvline(vline_pos, linestyle='-', linewidth=0.2, c='#888888')
-        label_position = (xmin+(2*indices.min()+indices.size)*0.5*indiv_width, ymin-0.01)
-        figure.text(label_position[0], label_position[1], popname, fontsize=6, color='k', \
-            horizontalalignment='right', verticalalignment='top', rotation=70)
+        if indices.size>0:
+            vline_pos = (indices.max()+1)*indiv_width 
+            subplot.axvline(vline_pos, linestyle='-', linewidth=0.2, c='#888888')
+            label_position = (xmin+(2*indices.min()+indices.size)*0.5*indiv_width, ymin-0.01)
+            figure.text(label_position[0], label_position[1], popname, fontsize=6, color='k', \
+                horizontalalignment='right', verticalalignment='top', rotation=70)
 
     return figure
 
@@ -127,11 +128,11 @@ def usage():
 
     print "\nHere is how you can use this script\n"
     print "Usage: python %s"%sys.argv[0]
-    print "\t -K <int>"
-    print "\t --input=<file>"
-    print "\t --output=<file>"
-    print "\t --popfile=<file> (optional)"
-    print "\t --title=<figure title> (optional)"
+    print "\t -K <int>  (number of populations)"
+    print "\t --input=<file>  (/path/to/input/file; same as output flag passed to structure.py)"
+    print "\t --output=<file> (/path/to/output/file)"
+    print "\t --popfile=<file> (file with known categorical labels; optional)"
+    print "\t --title=<figure title> (a title for the figure; optional)"
 
 
 if __name__=="__main__":
@@ -139,7 +140,7 @@ if __name__=="__main__":
     # parse command-line options
     argv = sys.argv[1:]
     smallflags = "K:"
-    bigflags = ["input=", "output=", "title="]
+    bigflags = ["input=", "output=", "popfile=", "title="]
     try:
         opts, args = getopt.getopt(argv, smallflags, bigflags)
         if not opts:
@@ -160,6 +161,5 @@ if __name__=="__main__":
         title = params['inputfile']
 
     # plot the data
-    figfile = '%s.png'%params['outputfile']
     figure = plot_admixture(admixture, population_indices, population_labels, title)
-    figure.savefig(figfile, dpi=300, format='png')
+    figure.savefig(params['outputfile'], dpi=300)

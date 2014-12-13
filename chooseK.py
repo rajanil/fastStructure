@@ -102,7 +102,7 @@ if __name__=="__main__":
     filetag = parseopts(opts)
 
     files = glob.glob('%s.*.log'%filetag)
-    Ks = np.array([int(file.split('.')[1]) for file in files])
+    Ks = np.array([int(file.split('.')[-2]) for file in files])
     marginal_likelihoods = parse_logs(files)
 
     files = glob.glob('%s.*.meanQ'%filetag)
