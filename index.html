@@ -95,7 +95,7 @@ straightforward to install all these dependencies
  (3) directly from source</p>
 
 <p>Detailed instructions for installing these dependencies are provided in the README file
-in the software bundle.</p>
+in the fastStructure software bundle.</p>
 
 <h2>
 <a name="getting-the-source-code" class="anchor" href="#getting-the-source-code"><span class="octicon octicon-link"></span></a>Getting the source code</h2>
@@ -123,18 +123,19 @@ git merge origin/master
 <h2>
 <a name="building-python-extensions" class="anchor" href="#building-python-extensions"><span class="octicon octicon-link"></span></a>Building Python extensions</h2>
 
-<p>Before building python extensions, it is important to identify the path to the
-files libgsl.so and libgslcblas.so, and header file gsl/gsl_sf_psi.h that are part
-of your GSL installation. For a default installation of GSL, 
-the libraries (.so files) are usually found in /usr/local/lib 
-and the header files (.h files) in /usr/local/include. In this case, you can add these
-lines to your .bashrc file on your home directory, and then run 
-<code>source ~/.bashrc</code>.</p> to set these environment variables.
+<p>Before building python extensions, it is important to identify the path to the library
+files <em>libgsl.so</em> and <em>libgslcblas.so</em>, and header file 
+<em>gsl/gsl_sf_psi.h</em> that are part of your GSL installation. For a default 
+installation of GSL, the libraries (<em>.so</em> files) are usually found in /usr/local/lib
+and the header files (<em>.h</em> files) in /usr/local/include. In this case, you can add these
+lines to your <em>.bashrc</em> file on your home directory.
 
 <pre><code>export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
 export CFLAGS="-I/usr/local/include"
 export LDFLAGS="-L/usr/local/lib"
 </code></pre>
+
+<p>Then, run <code>source ~/.bashrc</code> to set these environment variables.</p>
 
 <p>To build library extensions, you can do the following:</p>
 
