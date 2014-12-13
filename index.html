@@ -67,7 +67,7 @@
         <h1>
 <a name="Introduction" class="anchor" href="#Introduction"><span class="octicon octicon-link"></span></a>Introduction</h1>
 
-<p><em>fastStructure</em> is an algorithm for <a href="http://biorxiv.org/content/early/2013/12/02/001073">inferring population structure from large SNP genotype data</a>. It is based on a variational Bayesian framework for posterior inference and is written in Python2.x. Here, we summarize how to setup this software package, compile the C and Cython scripts and run the algorithm on a test simulated genotype dataset.</p>
+<p><em>fastStructure</em> is an algorithm for inferring population structure from large SNP genotype data. It is based on a variational Bayesian framework for posterior inference and is written in Python2.x. Here, we summarize how to setup this software package, compile the C and Cython scripts and run the algorithm on a test simulated genotype dataset.</p>
 
 <h2>
 <a name="citation" class="anchor" href="#citation"><span class="octicon octicon-link"></span></a>Citation</h2>
@@ -77,6 +77,14 @@
 (Genetics) June 2014 197:573-589
 [<a href="www.genetics.org/content/197/2/573.full">Genetics</a>, 
 <a href="biorxiv.org/content/early/2013/12/02/001073">Biorxiv</a>] </p>
+
+<h2>
+<a name="updates" class="anchor" href="#updates"><span class="octicon octicon-link"></span></a>Updates</h2>
+
+    + fixed minor issue in parser for structure-formatted data files
+    + minor changes to initialization step when using logistic prior, for faster execution
+    + Python warning messages have been silenced
+    + distruct script modified to allow for any user-specified figure file format
 
 <h2>
 <a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h2>
@@ -214,11 +222,11 @@ format and the original Structure format. If the data are in plink format, ensur
 bed, bim and fam files for the dataset are all present in the same path.</p>
 
 <p>While the original Structure program allowed for a more flexible input format, fastStructure expects a more
-specific `structure input format'. Specifically, rows in the data file correspond to samples, with two rows per sample
+specific Structure-like input format. Specifically, rows in the data file correspond to samples, with two rows per sample
 (note that only diploids are handled by this software), and columns correspond to SNPs. The first 6 columns
 of the file will be ignored; these typically would include IDs, metadata, etc. This software only 
 handles bi-allelic loci. The two alleles at each locus can be encoded as desired; however, missing data 
-should be encoded as `-9'. 
+should be encoded as `-9'.</p> 
 
 <h2>
 <a name="running-on-test-data" class="anchor" href="#running-on-test-data"><span class="octicon octicon-link"></span></a>Running on test data</h2>
@@ -226,12 +234,12 @@ should be encoded as `-9'.
 <p>A test simulated dataset is provided in test/testdata.bed with genotypes sampled for
 200 individuals at 500 SNP loci. The output files in test/ were generated as follows:</p>
 
-<pre><code>$ python structure.py -K 3 --input=test/testdata --output=testoutput_simple --full --seed=100
+<pre><code>$ python structure.py -K 3 --input=test/testdata --output=test/testoutput_simple --full --seed=100
 $ ls test/testoutput_simple*
 test/testoutput_simple.3.log  test/testoutput_simple.3.meanP  test/testoutput_simple.3.meanQ  
 test/testoutput_simple.3.varP  test/testoutput_simple.3.varQ
 
-$ python structure.py -K 3 --input=test/testdata --output=testoutput_logistic --full --seed=100 --prior=logistic
+$ python structure.py -K 3 --input=test/testdata --output=test/testoutput_logistic --full --seed=100 --prior=logistic
 $ ls test/testoutput_logistic*
 test/testoutput_logistic.3.log    test/testoutput_logistic.3.meanQ  test/testoutput_logistic.3.varQ
 test/testoutput_logistic.3.meanP  test/testoutput_logistic.3.varP
