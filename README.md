@@ -46,6 +46,7 @@ versions of Cython and GSL can be different from those below.)
 [instructions](http://gbs-cloud-tutorial.readthedocs.org/en/latest/08_useful.html)
 
 **3. install Numpy**
+
     cd Downloads
     git clone http://github.com/numpy/numpy.git numpy
     cd numpy
@@ -54,6 +55,7 @@ versions of Cython and GSL can be different from those below.)
     sudo rm -R numpy
 
 **4. install Scipy**
+
     cd Downloads
     git clone http://github.com/scipy/scipy.git scipy
     cd scipy
@@ -62,6 +64,7 @@ versions of Cython and GSL can be different from those below.)
     sudo rm -R scipy
 
 **5. install Cython**
+
     cd Downloads
     wget http://cython.org/release/Cython-0.20.2.zip
     unzip Cython-0.20.2.zip
@@ -71,6 +74,7 @@ versions of Cython and GSL can be different from those below.)
     sudo rm -R Cython-0.20.2.zip Cython-0.20.2
 
 **6. install GNU Scientific Library**
+
     cd Downloads
     wget http://gnu.mirror.vexxhost.com/gsl/gsl-latest.tar.gz
     tar -zxvf gsl-latest.tar.gz
