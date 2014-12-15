@@ -66,7 +66,7 @@ def get_admixture_proportions(params):
     # get population labels
     if params.has_key('popfile'):
         handle = open(params['popfile'],'r')
-        populations = [line.strip().split() for line in handle]
+        populations = [line.strip() for line in handle]
         handle.close()
         population_labels = list(np.unique(populations))
         population_indices = np.array([population_labels.index(pop) for pop in populations])
