@@ -34,25 +34,43 @@ void P_update_simple(const uint8_t* G, const double* zetabeta, const double* zet
             // missing data do not contribute
             if (genotype!=3) {
 
+	        // Add across the components to compute the normalizing constant
+                // for the indicator variables.
+                // These are already exponentiated, so they are terms from exp(log likelihood).
+                // xi: exp(E(log(probability of population k for individual n))
+                // zetabeta: exp(E(log(probability of allele l for population k))
                 // compute xi*zeta_{beta,gamma}
                 theta_beta_sum = 0.0;
                 theta_gamma_sum = 0.0;
                 for (k=0; k<K; k++) {
-                    theta_beta_sum += xi[n*K+k] * zetabeta[l*K+k];
-                    theta_gamma_sum += xi[n*K+k] * zetagamma[l*K+k];
+		    // In my notation:
+		    // theta_beta is the indicator that allele A is in population k.
+                    theta_beta_sum += xi[n * K + k] * zetabeta[l * K + k];
+		    // theta_gamma is the indicator that allele A is in population k.
+                    theta_gamma_sum += xi[n * K + k] * zetagamma[l * K + k];
                 }
 
                 // increment var_{beta,gamma}_tmp
                 for (k=0; k<K; k++) {
-                    var_beta_tmp[k] += (double) genotype * xi[n*K+k] / theta_beta_sum;
-                    var_gamma_tmp[k] += (double) (2-genotype) * xi[n*K+k] / theta_gamma_sum;
+		  // genotype is either 0, 1, or 2.
+                  // If it is 2, both alleles count towards beta.  
+                  // If it is 0, both alleles count towards gamma.
+                  // If it is 1, each allele gets one.
+                  // Note that this is all multiplied by zetabeta and zetagamma below.
+                  //
+                  // TOOD: I believe this is a bug.
+                  // Why do the denominators sum over all the terms, but the numerators
+                  // only by the genotypes?  These indicators do not sum to one?
+                    var_beta_tmp[k] += (double) genotype * xi[n * K + k] / theta_beta_sum;
+                    var_gamma_tmp[k] += (double) (2 - genotype) * xi[n * K + k] / theta_gamma_sum;
                 }
             }
         }
 
         // compute var_{beta,gamma}
         for (k=0; k<K; k++) {
-            idx = l*K+k;
+	  // The variables <beta> and <gamma> are the priors.
+            idx = l * K + k;
             var_beta[idx] = beta[idx] + zetabeta[idx] * var_beta_tmp[k];
             var_gamma[idx] = gamma[idx] + zetagamma[idx] * var_gamma_tmp[k];
         }

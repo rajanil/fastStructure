@@ -41,7 +41,7 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K,
 
     if starting_values_file:
       handle = open('%s.%d.log'%(outfile,K),'a')
-      handle.write('Reading starting parameters from %s' % starting_values_file)
+      handle.write('Reading starting parameters from %s\n' % starting_values_file)
       handle.close()
 
       # Read pi variational parameters.
@@ -92,6 +92,7 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K,
     else:
         for restart in xrange(5):
 
+        # TODO: I think the indentation got screwed up here.
         # if dataset is too large, initialize variational parameters 
             # using a random subset of the data (similar to a warm start).
             if batch_size<L:
@@ -180,17 +181,18 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K,
 
     itertime = time.time()
     reltol = np.inf
+
     while np.abs(reltol)>mintol:
         # accelerated variational admixture proportion update
-        psi.square_update(G, pi)
+        #psi.square_update(G, pi)
         psi.update(G, pi)
 
         # accelearted variational allele frequency update
-        pi.square_update(G, psi)
+        #pi.square_update(G, psi)
         pi.update(G, psi)
 
-        # Compute marginal likelihood once every 10 iterations
-        if (iter+1)%10==0:
+        # Compute marginal likelihood once every 100 iterations
+        if (iter+1) % 1 ==0:
 
             E_new = mlhood.marginal_likelihood(G, psi, pi)
             reltol = E_new-E
