@@ -182,6 +182,7 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K,
     itertime = time.time()
     reltol = np.inf
 
+    print 'Starting optimization.\n'
     while np.abs(reltol)>mintol:
         # accelerated variational admixture proportion update
         #psi.square_update(G, pi)
@@ -191,8 +192,8 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K,
         #pi.square_update(G, psi)
         pi.update(G, psi)
 
-        # Compute marginal likelihood once every 100 iterations
-        if (iter+1) % 1 ==0:
+        # Compute marginal likelihood once every 10 iteration
+        if (iter+1) % 10 ==0:
 
             E_new = mlhood.marginal_likelihood(G, psi, pi)
             reltol = E_new-E

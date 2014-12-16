@@ -27,21 +27,21 @@ double marglikehood(const uint8_t* G, const double* zetabeta, const double* zeta
                 if (genotype==0) {
 
                     for (k=0; k<K; k++) {
-                        zasum += zetagamma[l*K+k]*xi[n*K+k];
+                        zasum += zetagamma[l*K+k] * xi[n*K+k];
                     }
                     zbsum = zasum;
 
                 } else if (genotype==1) {
 
                     for (k=0; k<K; k++) {
-                        zasum += zetagamma[l*K+k]*xi[n*K+k];
-                        zbsum += zetabeta[l*K+k]*xi[n*K+k];
+                        zasum += zetagamma[l*K+k] * xi[n*K+k];
+                        zbsum += zetabeta[l*K+k] * xi[n*K+k];
                     }
 
                 } else if (genotype==2) {
 
                     for (k=0; k<K; k++) {
-                        zasum += zetabeta[l*K+k]*xi[n*K+k];
+                        zasum += zetabeta[l*K+k] * xi[n*K+k];
                     }
                     zbsum = zasum;
 

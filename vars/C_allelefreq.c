@@ -45,10 +45,14 @@ void P_update_simple(const uint8_t* G, const double* zetabeta, const double* zet
                 for (k=0; k<K; k++) {
 		    // In my notation:
 		    // theta_beta is the indicator that allele A is in population k.
-                    theta_beta_sum += xi[n * K + k] * zetabeta[l * K + k];
 		    // theta_gamma is the indicator that allele A is in population k.
-                    theta_gamma_sum += xi[n * K + k] * zetagamma[l * K + k];
+                    //theta_beta_sum += xi[n * K + k] * zetabeta[l * K + k];
+                    //theta_gamma_sum += xi[n * K + k] * zetagamma[l * K + k];
+   		                        theta_beta_sum += (double) genotype * xi[n * K + k] * zetabeta[l * K + k];
+                    theta_gamma_sum += (double) (2 - genotype) * xi[n * K + k] * zetagamma[l * K + k];
                 }
+                theta_beta_sum = theta_beta_sum == 0.0 ? 1.0: theta_beta_sum;
+                theta_gamma_sum = theta_gamma_sum == 0.0 ? 1.0: theta_gamma_sum;
 
                 // increment var_{beta,gamma}_tmp
                 for (k=0; k<K; k++) {
