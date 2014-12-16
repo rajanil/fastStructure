@@ -17,7 +17,8 @@ def parseopts(opts):
             'prior': "simple",
             'cv': 0,
             'full': False,
-            'format': 'bed'
+            'format': 'bed',
+            'starting_values_file': None
             }
 
     for opt, arg in opts:
@@ -30,6 +31,9 @@ def parseopts(opts):
 
         elif opt in ["--output"]:
             params['outputfile'] = arg
+
+        elif opt in ["--starting_values_file"]:
+            params['starting_values_file'] = arg
 
         elif opt in ["--prior"]:
             params['prior'] = arg
@@ -136,6 +140,7 @@ def usage():
     print "\t --format={bed,str} (default: bed)"
     print "\t --full (to output all variational parameters; optional)"
     print "\t --seed=<int> (optional)"
+    print "\t --starting_values_file=<file> (optional)"
 
 
 if __name__=="__main__":
@@ -143,7 +148,8 @@ if __name__=="__main__":
     # parse command-line options
     argv = sys.argv[1:]
     smallflags = "K:"
-    bigflags = ["prior=", "tol=", "input=", "output=", "cv=", "seed=", "format=", "full"] 
+    bigflags = ["prior=", "tol=", "input=", "output=", "cv=",
+                "seed=", "format=", "full", "starting_values_file="] 
     try:
         opts, args = getopt.getopt(argv, smallflags, bigflags)
         if not opts:
@@ -172,7 +178,9 @@ if __name__=="__main__":
     # run the variational algorithm
     Q, P, other = fastStructure.infer_variational_parameters(G, params['K'], \
                     params['outputfile'], params['mintol'], \
-                    params['prior'], params['cv'])
+                    params['prior'], params['cv'],
+                    params['starting_values_file'])
 
     # write out inferred parameters
     write_output(Q, P, other, params)
+.

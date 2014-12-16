@@ -25,11 +25,11 @@ def load(file):
         except IndexError:
             minor = ''
 
-        # maps structure represntation of genotypes to an unsigned integer
-        genomap = { minor+minor : 2,
-                    minor+major : 1,
-                    major+minor : 1,
-                    major+major : 0
+        # maps structure representation of genotypes to an unsigned integer
+        genomap = { minor + minor : 2,
+                    minor + major : 1,
+                    major + minor : 1,
+                    major + major : 0
                   }
 
         # convert genotypes to fastStructure representation
