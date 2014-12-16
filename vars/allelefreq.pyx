@@ -79,6 +79,15 @@ cdef class AlleleFreq:
             self.mu = np.require(self.mu, dtype=np.float64, requirements='C')
             self.Lambda = np.require(self.Lambda, dtype=np.float64, requirements='C')
 
+    cdef set_beta_gamma(self, new_beta, new_gamma):
+        """
+        Update the values of beta and gamma and the quantities derived from them.
+        """
+        self.var_beta = new_beta
+        self.var_gamma = new_gamma
+        self.zetabeta = np.exp(digamma(self.var_beta) - digamma(self.var_beta+self.var_gamma))
+        self.zetagamma = np.exp(digamma(self.var_gamma) - digamma(self.var_beta+self.var_gamma)) 
+
     cdef _update_simple(self, np.ndarray[np.uint8_t, ndim=2] G, ap.AdmixProp psi):
 
         """

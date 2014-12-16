@@ -9,6 +9,7 @@ cimport vars.admixprop as ap
 import vars.admixprop as ap
 import vars.marglikehood as mlhood
 import time
+from scipy.special import digamma, gammaln, polygamma
 
 def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K,
                                  str outfile, double mintol, str prior,
@@ -39,22 +40,54 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K,
     Estart = -np.inf
 
     if starting_values_file:
-      print 'Initializing values from file.'
+      handle = open('%s.%d.log'%(outfile,K),'a')
+      handle.write('Reading starting parameters from %s' % starting_values_file)
+      handle.close()
+
       # Read pi variational parameters.
-      var_p_handle = open(starting_values_file + '.varP'. 'r')
-      var_p = np.array([ line.strip().split() for line in var_p_handle ])
+      var_p_handle = open(starting_values_file + '.varP', 'r')
+      var_p = np.loadtxt(var_p_handle)
       var_p_handle.close()
 
       # Read psi variational parameters.
-      var_q_handle = open(starting_values_file + '.varQ'. 'r')
-      var_q = np.array([ line.strip().split() for line in var_q_handle ])
+      var_q_handle = open(starting_values_file + '.varQ', 'r')
+      var_q = np.loadtxt(var_q_handle)
       var_q_handle.close()
       
-      print var_q
-      print var_p
+      # Check the shapes.
+      if var_q.shape[0] != N:
+        print 'The Q starting parameters have the wrong number of rows.'
+        raise IndexError        
 
-      psi = ap.AdmixProp(N,K)
-      pi = af.AlleleFreq(L, K, prior)
+      if var_q.shape[1] != K:
+        print 'The Q starting parameters have the wrong number of columns.'
+        raise IndexError        
+
+      if var_p.shape[0] != L:
+        print 'The P starting parameters have the wrong number of rows.'
+        raise IndexError        
+
+      if var_p.shape[1] != 2 * K:
+        print 'The P starting parameters have the wrong number of columns.'
+        raise IndexError        
+
+      psistart = ap.AdmixProp(N,K)
+      pistart = af.AlleleFreq(L, K, prior)
+
+      # Update pistart's necessary quantities.
+      # TODO: I think this should be in a method of AlleleFreq.
+      pistart.var_beta = var_p[..., 0:K]
+      pistart.var_gamma = var_p[..., K:(2 * K)]
+      pistart.zetabeta = (np.exp(digamma(pistart.var_beta) -
+                          digamma(pistart.var_beta+pistart.var_gamma)))
+      pistart.zetagamma = (np.exp(digamma(pistart.var_gamma) -
+                           digamma(pistart.var_beta+pistart.var_gamma)))
+
+      # Update psistart's necessary quantities.
+      # TODO: I think this should be in a method of AdmixProp.
+      psistart.var = var_q
+      psistart.xi = (np.exp(digamma(psistart.var) -
+                     digamma(utils.insum(psistart.var, [1]))))
 
     else:
         for restart in xrange(5):
@@ -132,7 +165,6 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K,
             psistart = psi.copy()
             Estart = E
 
-    # TODO(rgiordan): Put an option for your own warm start in here.
     itertime = time.time()-itertime
     E = Estart
     pi = pistart.copy()
@@ -190,7 +222,8 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K,
     if cv:
         meandeviance = CV(G, psi, pi, cv, mintol)
         handle = open('%s.%d.log'%(outfile,K),'a')
-        handle.write("CV error = %.7f, %.7f \n"%(np.mean(meandeviance), np.std(meandeviance, ddof=1)))
+        handle.write("CV error = %.7f, %.7f \n" %
+                     (np.mean(meandeviance), np.std(meandeviance, ddof=1)))
         handle.close()
 
     other = dict([('varQ', psi.var),

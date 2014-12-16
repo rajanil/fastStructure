@@ -183,4 +183,4 @@ if __name__=="__main__":
 
     # write out inferred parameters
     write_output(Q, P, other, params)
-.
+
