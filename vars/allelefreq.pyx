@@ -83,10 +83,6 @@ cdef class AlleleFreq:
         """
         Update the values of beta and gamma and the quantities derived from them.
         """
-        self.var_beta = new_beta
-        self.var_gamma = new_gamma
-        self.zetabeta = np.exp(digamma(self.var_beta) - digamma(self.var_beta+self.var_gamma))
-        self.zetagamma = np.exp(digamma(self.var_gamma) - digamma(self.var_beta+self.var_gamma)) 
 
     cdef _update_simple(self, np.ndarray[np.uint8_t, ndim=2] G, ap.AdmixProp psi):
 
