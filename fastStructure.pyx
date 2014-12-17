@@ -186,15 +186,11 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K,
     print 'Starting optimization.\n'
     while np.abs(reltol)>mintol:
         # accelerated variational admixture proportion update
-        print '  updating psi square, '
         psi.square_update(G, pi)
-        print ' updating psi\n'
         psi.update(G, pi)
 
         # accelearted variational allele frequency update
-        print '  updating pi square, '
         pi.square_update(G, psi)
-        print ' updating pi'
         pi.update(G, psi)
 
         # Compute marginal likelihood once every 10 iteration
