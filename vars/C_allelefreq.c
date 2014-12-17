@@ -37,8 +37,9 @@ void P_update_simple(const uint8_t* G, const double* zetabeta, const double* zet
 	        // Add across the components to compute the normalizing constant
                 // for the indicator variables.
                 // These are already exponentiated, so they are terms from exp(log likelihood).
-                // xi: exp(E(log(probability of population k for individual n))
-                // zetabeta: exp(E(log(probability of allele l for population k))
+                //   xi: exp(E(log(probability of population k for individual n))
+                //   zetabeta: exp(E(log(probability of allele l for population k))
+                //
                 // compute xi*zeta_{beta,gamma}
                 theta_beta_sum = 0.0;
                 theta_gamma_sum = 0.0;
@@ -46,17 +47,11 @@ void P_update_simple(const uint8_t* G, const double* zetabeta, const double* zet
 		    // In my notation:
 		    // theta_beta is the indicator that allele A is in population k.
 		    // theta_gamma is the indicator that allele A is in population k.
-                    //theta_beta_sum += xi[n * K + k] * zetabeta[l * K + k];
-                    //theta_gamma_sum += xi[n * K + k] * zetagamma[l * K + k];
-   		    theta_beta_sum += (double) genotype * xi[n * K + k] * zetabeta[l * K + k];
-                    theta_gamma_sum += (double) (2 - genotype) * xi[n * K + k] * zetagamma[l * K + k];
+
+                    theta_beta_sum += xi[n * K + k] * zetabeta[l * K + k];
+                    theta_gamma_sum += xi[n * K + k] * zetagamma[l * K + k];
                 }
   
-                // If the sum is zero, the numerator will be zero too, and we
-                // can safely set the normalization constant to one to avoid divide by zero errors.
-                theta_beta_sum = theta_beta_sum == 0.0 ? 1.0: theta_beta_sum;
-                theta_gamma_sum = theta_gamma_sum == 0.0 ? 1.0: theta_gamma_sum;
-
                 // increment var_{beta,gamma}_tmp
                 for (k=0; k<K; k++) {
 		  // genotype is either 0, 1, or 2.
@@ -64,10 +59,6 @@ void P_update_simple(const uint8_t* G, const double* zetabeta, const double* zet
                   // If it is 0, both alleles count towards gamma.
                   // If it is 1, each allele gets one.
                   // Note that this is all multiplied by zetabeta and zetagamma below.
-                  //
-                  // TOOD: I believe this is a bug.
-                  // Why do the denominators sum over all the terms, but the numerators
-                  // only by the genotypes?  These indicators do not sum to one?
                     var_beta_tmp[k] += (double) genotype * xi[n * K + k] / theta_beta_sum;
                     var_gamma_tmp[k] += (double) (2 - genotype) * xi[n * K + k] / theta_gamma_sum;
                 }

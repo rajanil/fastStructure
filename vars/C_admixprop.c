@@ -23,14 +23,9 @@ void Q_update(const uint8_t* G, const double* zetabeta, const double* zetagamma,
 
                 // compute normalization
                 for (k=0; k<K; k++) {
-		  //normbeta += zetabeta[l*K+k] * xi[n*K+k];
-		  //normgamma += zetagamma[l*K+k] * xi[n*K+k];
-		  normbeta += (double) genotype * zetabeta[l*K+k] * xi[n*K+k];
-                  normgamma += (double) (2-genotype) * zetagamma[l*K+k] * xi[n*K+k];
+		  normbeta += zetabeta[l*K+k] * xi[n*K+k];
+		  normgamma += zetagamma[l*K+k] * xi[n*K+k];
                 }
-
-                normbeta = normbeta == 0.0 ? 1.0: normbeta;
-                normgamma = normgamma == 0.0 ? 1.0: normgamma;
 
                 // loop over populations
                 for (k=0; k<K; k++) {
