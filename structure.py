@@ -18,7 +18,7 @@ def parseopts(opts):
             'cv': 0,
             'full': False,
             'format': 'bed',
-            'starting_values_file': None
+            'starting_values_file': ''
             }
 
     for opt, arg in opts:
@@ -178,8 +178,8 @@ if __name__=="__main__":
     # run the variational algorithm
     Q, P, other = fastStructure.infer_variational_parameters(G, params['K'], \
                     params['outputfile'], params['mintol'], \
-                    params['prior'], params['cv'],
-                    params['starting_values_file'])
+                    params['prior'], params['cv'], params['starting_values_file'])
+
 
     # write out inferred parameters
     write_output(Q, P, other, params)

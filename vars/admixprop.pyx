@@ -24,11 +24,11 @@ cdef class AdmixProp:
         self.K = K
 
         # Initializing hyperparameters
-        self.alpha = 1./K*np.ones((1,K))
+        self.alpha = 1. / K * np.ones((1,K))
 
         # Initializing variational parameters for admixture proportions
-        self.var = np.ones((N,K)) + 0.1*np.random.rand(N,K)
-        self.xi = np.exp(digamma(self.var)-digamma(utils.insum(self.var,[1])))
+        self.var = np.ones((N,K)) + 0.1 * np.random.rand(N,K)
+        self.xi = np.exp(digamma(self.var) - digamma(utils.insum(self.var, [1])))
         self.oldvar = []
 
     cdef copy(self):
@@ -78,7 +78,7 @@ cdef class AdmixProp:
             self.var = self.oldvar[-1]
         else:
             self.var = self.alpha + self.var
-            self.xi = np.exp(digamma(self.var)-digamma(utils.insum(self.var,[1])))
+            self.xi = np.exp(digamma(self.var) - digamma(utils.insum(self.var, [1])))
         self.require()
 
     cdef square_update(self, np.ndarray[np.uint8_t, ndim=2] G, af.AlleleFreq pi):

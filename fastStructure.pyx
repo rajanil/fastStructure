@@ -92,80 +92,81 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K,
     else:
         for restart in xrange(5):
 
-        # TODO: I think the indentation got screwed up here.
-        # if dataset is too large, initialize variational parameters 
+            # TODO: I think the indentation got screwed up here.
+            # if dataset is too large, initialize variational parameters 
             # using a random subset of the data (similar to a warm start).
             if batch_size<L:
 
-            # choose random subset of the SNPs
+                # choose random subset of the SNPs
                 indices = list(utils.random_combination(xrange(L), batch_size))
                 g = G[:,indices]
                 g = np.require(g, dtype=np.uint8, requirements='C')
 
-            # iterate the variational algorithm to `weak' convergence
-            # to initialize parameters for admixture proportions
-            psi = ap.AdmixProp(N, K)
-            pi = af.AlleleFreq(batch_size, K, prior)
-            # variational admixture proportion update
-            psi.update(g, pi)
-            # variational allele frequency update
-            pi.update(g, psi)
-            E = mlhood.marginal_likelihood(g, psi, pi)
-            reltol = np.inf
-            iter = 0
-            while np.abs(reltol)>mintol*10:
-                # accelerated variational admixture proportion update
-                psi.square_update(g, pi)
-                # accelerated variational allele frequency update
-                pi.square_update(g, psi)
-                iter += 1
-                if iter%10==0:
-                    Enew = mlhood.marginal_likelihood(g, psi, pi)
-                    reltol = Enew - E
-                    E = Enew
-                    # update allele frequency hyperparameters
-                    pi.update_hyperparam(False)
-                    piG = pi.copy()
-
-            # after initializing admixture proportions, initialize the allele
-            # frequency parameters for all SNPs, keeping admixture proportions fixed.
-            # if the logistic prior is chosen, hyperparameter `Lambda`
-            # is also kept fixed in this step.
-            pi = af.AlleleFreq(L, K, prior)
-            if pi.prior=='logistic':
-                pi.Lambda = piG.Lambda.copy()
-                old = [pi.var_beta.copy(), pi.var_gamma.copy()]
-                diff = np.inf
-                while diff>1e-1:
+                # iterate the variational algorithm to `weak' convergence
+                # to initialize parameters for admixture proportions
+                psi = ap.AdmixProp(N, K)
+                pi = af.AlleleFreq(batch_size, K, prior)
+                # variational admixture proportion update
+                psi.update(g, pi)
+                # variational allele frequency update
+                pi.update(g, psi)
+                E = mlhood.marginal_likelihood(g, psi, pi)
+                reltol = np.inf
+                iter = 0
+                while np.abs(reltol)>mintol*10:
+                    # accelerated variational admixture proportion update
+                    psi.square_update(g, pi)
                     # accelerated variational allele frequency update
-                    pi.square_update(G, psi)
-                    diff = (np.mean(np.abs(pi.var_beta-old[0]) +
-                            np.abs(pi.var_gamma-old[1])))
+                    pi.square_update(g, psi)
+                    iter += 1
+                    if iter%10==0:
+                        Enew = mlhood.marginal_likelihood(g, psi, pi)
+                        reltol = Enew - E
+                        E = Enew
+                        # update allele frequency hyperparameters
+                        pi.update_hyperparam(False)
+                        piG = pi.copy()
+
+                # after initializing admixture proportions, initialize the allele
+                # frequency parameters for all SNPs, keeping admixture proportions fixed.
+                # if the logistic prior is chosen, hyperparameter `Lambda`
+                # is also kept fixed in this step.
+                pi = af.AlleleFreq(L, K, prior)
+                if pi.prior=='logistic':
+                    pi.Lambda = piG.Lambda.copy()
                     old = [pi.var_beta.copy(), pi.var_gamma.copy()]
-                    # update allele frequency hyperparameters
-                    pi.update_hyperparam(True)
+                    diff = np.inf
+                    while diff>1e-1:
+                        # accelerated variational allele frequency update
+                        pi.square_update(G, psi)
+                        diff = (np.mean(np.abs(pi.var_beta-old[0]) +
+                                np.abs(pi.var_gamma-old[1])))
+                        old = [pi.var_beta.copy(), pi.var_gamma.copy()]
+                        # update allele frequency hyperparameters
+                        pi.update_hyperparam(True)
 
-        else:
+            else:
 
-            # simple initializing of variational parameters (cold start)
-            psi = ap.AdmixProp(N,K)
-            pi = af.AlleleFreq(L, K, prior)
+                # simple initializing of variational parameters (cold start)
+                psi = ap.AdmixProp(N,K)
+                pi = af.AlleleFreq(L, K, prior)
 
-        # compute marginal likelihood for this initialization
-        psi.update(G, pi)
-        pi.update(G, psi)
-        E = mlhood.marginal_likelihood(G, psi, pi)
-        handle = open('%s.%d.log'%(outfile,K),'a')
-        handle.write("Marginal likelihood with initialization (%d) = %.10f\n" %
-                     (restart + 1, E))
-        handle.close()
-        # select current initialization if it has a higher marginal
-        # likelihood than all previous initializations
-        if E>Estart:
-            pistart = pi.copy()
-            psistart = psi.copy()
-            Estart = E
+            # compute marginal likelihood for this initialization
+            psi.update(G, pi)
+            pi.update(G, psi)
+            E = mlhood.marginal_likelihood(G, psi, pi)
+            handle = open('%s.%d.log'%(outfile,K),'a')
+            handle.write("Marginal likelihood with initialization (%d) = %.10f\n" %
+                         (restart + 1, E))
+            handle.close()
+            # select current initialization if it has a higher marginal
+            # likelihood than all previous initializations
+            if E>Estart:
+                pistart = pi.copy()
+                psistart = psi.copy()
+                Estart = E
 
+    print 'Beginning optimization\n'
     itertime = time.time()-itertime
     E = Estart
     pi = pistart.copy()
@@ -185,16 +186,20 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K,
     print 'Starting optimization.\n'
     while np.abs(reltol)>mintol:
         # accelerated variational admixture proportion update
-        #psi.square_update(G, pi)
+        print '  updating psi square, '
+        psi.square_update(G, pi)
+        print ' updating psi\n'
         psi.update(G, pi)
 
         # accelearted variational allele frequency update
-        #pi.square_update(G, psi)
+        print '  updating pi square, '
+        pi.square_update(G, psi)
+        print ' updating pi'
         pi.update(G, psi)
 
         # Compute marginal likelihood once every 10 iteration
         if (iter+1) % 10 ==0:
-
+            print '----likelihood check'
             E_new = mlhood.marginal_likelihood(G, psi, pi)
             reltol = E_new-E
             E = E_new
@@ -210,6 +215,7 @@ def infer_variational_parameters(np.ndarray[np.uint8_t, ndim=2] G, int K,
 
         iter += 1
 
+    print 'Optimization done.'
     # posterior mean of allele frequencies and admixture proportions
     P = pi.var_beta / (pi.var_beta + pi.var_gamma)
     Q = psi.var / utils.insum(psi.var, [1])

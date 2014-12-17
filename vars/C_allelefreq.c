@@ -29,7 +29,7 @@ void P_update_simple(const uint8_t* G, const double* zetabeta, const double* zet
         // loop over samples
         for (n=0; n<N; n++) {
 
-            genotype = G[n*L+l];
+            genotype = G[n * L + l];
 
             // missing data do not contribute
             if (genotype!=3) {
@@ -48,9 +48,12 @@ void P_update_simple(const uint8_t* G, const double* zetabeta, const double* zet
 		    // theta_gamma is the indicator that allele A is in population k.
                     //theta_beta_sum += xi[n * K + k] * zetabeta[l * K + k];
                     //theta_gamma_sum += xi[n * K + k] * zetagamma[l * K + k];
-   		                        theta_beta_sum += (double) genotype * xi[n * K + k] * zetabeta[l * K + k];
+   		    theta_beta_sum += (double) genotype * xi[n * K + k] * zetabeta[l * K + k];
                     theta_gamma_sum += (double) (2 - genotype) * xi[n * K + k] * zetagamma[l * K + k];
                 }
+  
+                // If the sum is zero, the numerator will be zero too, and we
+                // can safely set the normalization constant to one to avoid divide by zero errors.
                 theta_beta_sum = theta_beta_sum == 0.0 ? 1.0: theta_beta_sum;
                 theta_gamma_sum = theta_gamma_sum == 0.0 ? 1.0: theta_gamma_sum;
 

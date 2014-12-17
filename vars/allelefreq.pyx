@@ -108,8 +108,8 @@ cdef class AlleleFreq:
         if np.isnan(self.var_gamma).any():
             self.var_gamma = self.oldvar_gamma[-1]
 
-        self.zetabeta = np.exp(digamma(self.var_beta) - digamma(self.var_beta+self.var_gamma))
-        self.zetagamma = np.exp(digamma(self.var_gamma) - digamma(self.var_beta+self.var_gamma))
+        self.zetabeta = np.exp(digamma(self.var_beta) - digamma(self.var_beta + self.var_gamma))
+        self.zetagamma = np.exp(digamma(self.var_gamma) - digamma(self.var_beta + self.var_gamma))
         self.require()
 
     cdef _update_logistic(self, np.ndarray[np.uint8_t, ndim=2] G, ap.AdmixProp psi):
