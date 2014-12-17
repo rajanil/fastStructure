@@ -17,9 +17,9 @@ void P_update_simple(const uint8_t* G, const double* zetabeta, const double* zet
     var_beta_tmp = (double*) malloc(K * sizeof(double));
     var_gamma_tmp = (double*) malloc(K * sizeof(double));
 
+    //printf("\n----------- Beginning P_update_simple.\n");
     // loop over loci
     for (l=0; l<L; l++) {
-
         for (k=0; k<K; k++) {
 
             var_beta_tmp[k] = 0.0;
@@ -27,10 +27,12 @@ void P_update_simple(const uint8_t* G, const double* zetabeta, const double* zet
         }
 
         // loop over samples
+        //printf("\nl,n,g,beta_sum,gamma_sum,zb1,zg1,zb2,zg2\n");
         for (n=0; n<N; n++) {
-
+	  //printf("%ld,", l);
+	  //printf("%ld,", n);
             genotype = G[n * L + l];
-
+            //printf("%d,", genotype);
             // missing data do not contribute
             if (genotype!=3) {
 
@@ -51,7 +53,9 @@ void P_update_simple(const uint8_t* G, const double* zetabeta, const double* zet
                     theta_beta_sum += xi[n * K + k] * zetabeta[l * K + k];
                     theta_gamma_sum += xi[n * K + k] * zetagamma[l * K + k];
                 }
-  
+                //printf("%f,", theta_beta_sum);
+                //printf("%f,", theta_gamma_sum);
+ 
                 // increment var_{beta,gamma}_tmp
                 for (k=0; k<K; k++) {
 		  // genotype is either 0, 1, or 2.
@@ -61,8 +65,13 @@ void P_update_simple(const uint8_t* G, const double* zetabeta, const double* zet
                   // Note that this is all multiplied by zetabeta and zetagamma below.
                     var_beta_tmp[k] += (double) genotype * xi[n * K + k] / theta_beta_sum;
                     var_gamma_tmp[k] += (double) (2 - genotype) * xi[n * K + k] / theta_gamma_sum;
+
+                    idx = l * K + k;
+                    //printf("%f,", zetabeta[idx] * xi[n * K + k] / theta_beta_sum);
+                    //printf("%f,", zetagamma[idx] * xi[n * K + k] / theta_gamma_sum);
                 }
             }
+            //printf("\n");
         }
 
         // compute var_{beta,gamma}

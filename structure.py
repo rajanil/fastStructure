@@ -175,6 +175,12 @@ if __name__=="__main__":
         G = parse_str.load(params['inputfile'])
     G = np.require(G, dtype=np.uint8, requirements='C')
 
+    # Write the genome file for easy R wrangling.  Eventually I should
+    # figure out what's going on with the .bim file format.
+    handle = open('%s.%d.genome' % (params['outputfile'], params['K']), 'w')
+    handle.write('\n'.join(['  '.join(['%d' % i for i in g]) for g in G])+'\n')
+    handle.close()
+
     # run the variational algorithm
     Q, P, other = fastStructure.infer_variational_parameters(G, params['K'], \
                     params['outputfile'], params['mintol'], \
