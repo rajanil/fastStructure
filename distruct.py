@@ -71,9 +71,9 @@ def get_admixture_proportions(params):
         population_labels = list(set(populations))
 
         # group populations by cluster similarity
-        population_cluster = [np.mean(admixture[[i for i,p in populations if p==label],:],0).argmax() \
+        population_cluster = [np.mean(admixture[[i for i,p in enumerate(populations) if p==label],:],0).argmax() \
             for label in population_labels]
-        population_labels = [population_label[j] for j in np.argsort(population_cluster)]
+        population_labels = [population_labels[j] for j in np.argsort(population_cluster)]
         population_indices = np.array([population_labels.index(pop) for pop in populations])
 
         # re-order samples in admixture matrix
