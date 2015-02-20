@@ -35,7 +35,7 @@ straightforward to install all these dependencies
 
 Here are detailed instructions for installing these dependencies, provided by
 Thierry Gosselin from Université Laval, Québec. These instructions were 
-tested on Mac OS 10.8 (Mountain Lion) and 10.9 (Mavericks). Similar steps
+tested on Mac OS 10.8 (Mountain Lion), 10.9 (Mavericks) and 10.10 (Yosemite). Similar steps
 will also work on other Unix/Linux distributions. (Note that the latest
 versions of Cython and GSL can be different from those below.)
 
@@ -66,12 +66,12 @@ versions of Cython and GSL can be different from those below.)
 **5. install Cython**
 
     cd Downloads
-    wget http://cython.org/release/Cython-0.20.2.zip
-    unzip Cython-0.20.2.zip
-    cd Cython-0.20.2
+    wget http://cython.org/release/Cython-0.22.zip
+    unzip Cython-0.22.zip
+    cd Cython-0.22
     sudo python setup.py install
     cd ..
-    sudo rm -R Cython-0.20.2.zip Cython-0.20.2
+    sudo rm -R Cython-0.22.zip Cython-0.22
 
 **6. install GNU Scientific Library**
 
