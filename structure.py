@@ -119,9 +119,9 @@ def write_output(Q, P, other, params):
             for pb,pg in zip(other['varPb'],other['varPg'])])+'\n')
         handle.close()
 
-        handle = open('%s.%d.xi'%(params['outputfile'],params['K']),'w')
-        handle.write('\n'.join(['  '.join(['%.6f'%i for i in q]) for q in other['xi']])+'\n')
-        handle.close()
+        # handle = open('%s.%d.xi'%(params['outputfile'],params['K']),'w')
+        # handle.write('\n'.join(['  '.join(['%.6f'%i for i in q]) for q in other['xi']])+'\n')
+        # handle.close()
 
 def usage():
     
