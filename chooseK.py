@@ -79,9 +79,9 @@ def usage():
     brief description of various flags and options for this script
     """
 
-    print "\nHere is how you can use this script\n"
-    print "Usage: python %s"%sys.argv[0]
-    print "\t --input=<file>"
+    print("\nHere is how you can use this script\n")
+    print("Usage: python %s"%sys.argv[0])
+    print("\t --input=<file>")
 
 if __name__=="__main__":
 
@@ -95,7 +95,7 @@ if __name__=="__main__":
             usage()
             sys.exit(2)
     except getopt.GetoptError:
-        print "Incorrect options passed"
+        print("Incorrect options passed")
         usage()
         sys.exit(2)
 
@@ -108,5 +108,5 @@ if __name__=="__main__":
     files = glob.glob('%s.*.meanQ'%filetag)
     bestKs = parse_varQs(files)
 
-    print "Model complexity that maximizes marginal likelihood = %d"%Ks[np.argmax(marginal_likelihoods)]
-    print "Model components used to explain structure in data = %d"%np.argmax(np.bincount(bestKs)) 
+    print("Model complexity that maximizes marginal likelihood = %d"%Ks[np.argmax(marginal_likelihoods)])
+    print("Model components used to explain structure in data = %d"%np.argmax(np.bincount(bestKs))) 

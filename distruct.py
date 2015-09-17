@@ -83,8 +83,8 @@ def get_admixture_proportions(params):
 
     else:
 
-        print "file with population labels is not provided or does not exist .... \ncreating population labels based on inferred admixture proportions"
         population_labels = ['population %d'%i for i in xrange(1,K+1)]
+        print("file with population labels is not provided or does not exist .... \ncreating population labels based on inferred admixture proportions")
         population_indices = np.argmax(admixture,1)
 
         # re-order samples in admixture matrix
@@ -131,13 +131,13 @@ def usage():
     brief description of various flags and options for this script
     """
 
-    print "\nHere is how you can use this script\n"
-    print "Usage: python %s"%sys.argv[0]
-    print "\t -K <int>  (number of populations)"
-    print "\t --input=<file>  (/path/to/input/file; same as output flag passed to structure.py)"
-    print "\t --output=<file> (/path/to/output/file)"
-    print "\t --popfile=<file> (file with known categorical labels; optional)"
-    print "\t --title=<figure title> (a title for the figure; optional)"
+    print("\nHere is how you can use this script\n")
+    print("Usage: python %s"%sys.argv[0])
+    print("\t -K <int>  (number of populations)")
+    print("\t --input=<file>  (/path/to/input/file; same as output flag passed to structure.py)")
+    print("\t --output=<file> (/path/to/output/file)")
+    print("\t --popfile=<file> (file with known categorical labels; optional)")
+    print("\t --title=<figure title> (a title for the figure; optional)")
 
 
 if __name__=="__main__":
@@ -152,7 +152,7 @@ if __name__=="__main__":
             usage()
             sys.exit(2)
     except getopt.GetoptError:
-        print "Incorrect options passed"
+        print("Incorrect options passed")
         usage()
         sys.exit(2)
 
