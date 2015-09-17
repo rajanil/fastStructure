@@ -21,7 +21,7 @@ def plot_admixture(admixture, population_indices, population_labels, title):
     width = 0.74
     indiv_width = width/N
     subplot = figure.add_axes([xmin,ymin,width,height])
-    [spine.set_linewidth(0.001) for spine in subplot.spines.values()]
+    [spine.set_linewidth(0.001) for spine in list(subplot.spines.values())]
 
     for k in range(K):
         if k:
