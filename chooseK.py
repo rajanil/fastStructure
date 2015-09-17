@@ -4,6 +4,7 @@ import vars.utils as utils
 import glob
 import sys
 import pdb
+from builtins import map
 
 def parse_logs(files):
 
@@ -50,7 +51,7 @@ def parse_varQs(files):
     bestKs = []
     for file in files:
         handle = open(file,'r')
-        Q = np.array([map(float,line.strip().split()) for line in handle])
+        Q = np.array([list(map(float,line.strip().split())) for line in handle])
         Q = Q/utils.insum(Q,[1])
         handle.close()
 
