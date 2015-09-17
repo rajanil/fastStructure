@@ -64,7 +64,7 @@ def get_admixture_proportions(params):
     admixture = admixture/admixture.sum(1).reshape(N,1)
 
     # get population labels
-    if params.has_key('popfile'):
+    if 'popfile' in params:
         handle = open(params['popfile'],'r')
         populations = [line.strip() for line in handle]
         handle.close()
@@ -160,7 +160,7 @@ if __name__=="__main__":
     
     # get the data to be plotted
     admixture, population_indices, population_labels = get_admixture_proportions(params)
-    if params.has_key('title'):
+    if 'title' in params:
         title = params['title']
     else:
         title = params['inputfile']

@@ -77,7 +77,7 @@ def checkopts(params):
         print("a negative value was provided for the number of cross-validations folds")
         raise ValueError
 
-    if not params.has_key('K'):
+    if 'K' not in params:
         print("a positive integer should be provided for number of populations")
         raise KeyError
 
@@ -89,11 +89,11 @@ def checkopts(params):
         print("a negative value was provided for the number of populations")
         raise ValueError
     
-    if not params.has_key('inputfile'):
+    if 'inputfile' not in params:
         print("an input file needs to be provided")
         raise KeyError 
 
-    if not params.has_key('outputfile'):
+    if 'outputfile' not in params:
         print("an output file needs to be provided")
         raise KeyError
     
