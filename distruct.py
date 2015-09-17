@@ -3,6 +3,7 @@ import matplotlib.pyplot as plot
 import colorsys
 import getopt
 import sys, pdb
+from builtins import range
 
 def plot_admixture(admixture, population_indices, population_labels, title):
 
@@ -22,7 +23,7 @@ def plot_admixture(admixture, population_indices, population_labels, title):
     subplot = figure.add_axes([xmin,ymin,width,height])
     [spine.set_linewidth(0.001) for spine in subplot.spines.values()]
 
-    for k in xrange(K):
+    for k in range(K):
         if k:
             bottoms = admixture[:,:k].sum(1)
         else:
@@ -83,8 +84,8 @@ def get_admixture_proportions(params):
 
     else:
 
-        population_labels = ['population %d'%i for i in xrange(1,K+1)]
         print("file with population labels is not provided or does not exist .... \ncreating population labels based on inferred admixture proportions")
+        population_labels = ['population %d'%i for i in range(1,K+1)]
         population_indices = np.argmax(admixture,1)
 
         # re-order samples in admixture matrix
@@ -92,7 +93,7 @@ def get_admixture_proportions(params):
         population_indices = population_indices[order]
         admixture = admixture[order,:]
         order = np.arange(N)
-        for k in xrange(K):
+        for k in range(K):
             order[population_indices==k] = order[population_indices==k][np.argsort(admixture[population_indices==k,:][:,k])[::-1]]
         admixture = admixture[order,:]
 
