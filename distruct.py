@@ -20,9 +20,9 @@ def plot_admixture(admixture, population_indices, population_labels, title):
     width = 0.74
     indiv_width = width/N
     subplot = figure.add_axes([xmin,ymin,width,height])
-    [spine.set_linewidth(0.001) for spine in subplot.spines.values()]
+    [spine.set_linewidth(0.001) for spine in list(subplot.spines.values())]
 
-    for k in xrange(K):
+    for k in range(K):
         if k:
             bottoms = admixture[:,:k].sum(1)
         else:
@@ -64,7 +64,7 @@ def get_admixture_proportions(params):
     admixture = admixture/admixture.sum(1).reshape(N,1)
 
     # get population labels
-    if params.has_key('popfile'):
+    if 'popfile' in params:
         handle = open(params['popfile'],'r')
         populations = [line.strip() for line in handle]
         handle.close()
@@ -83,8 +83,8 @@ def get_admixture_proportions(params):
 
     else:
 
-        print "file with population labels is not provided or does not exist .... \ncreating population labels based on inferred admixture proportions"
-        population_labels = ['population %d'%i for i in xrange(1,K+1)]
+        print("file with population labels is not provided or does not exist .... \ncreating population labels based on inferred admixture proportions")
+        population_labels = ['population %d'%i for i in range(1,K+1)]
         population_indices = np.argmax(admixture,1)
 
         # re-order samples in admixture matrix
@@ -92,7 +92,7 @@ def get_admixture_proportions(params):
         population_indices = population_indices[order]
         admixture = admixture[order,:]
         order = np.arange(N)
-        for k in xrange(K):
+        for k in range(K):
             order[population_indices==k] = order[population_indices==k][np.argsort(admixture[population_indices==k,:][:,k])[::-1]]
         admixture = admixture[order,:]
 
@@ -131,13 +131,13 @@ def usage():
     brief description of various flags and options for this script
     """
 
-    print "\nHere is how you can use this script\n"
-    print "Usage: python %s"%sys.argv[0]
-    print "\t -K <int>  (number of populations)"
-    print "\t --input=<file>  (/path/to/input/file; same as output flag passed to structure.py)"
-    print "\t --output=<file> (/path/to/output/file)"
-    print "\t --popfile=<file> (file with known categorical labels; optional)"
-    print "\t --title=<figure title> (a title for the figure; optional)"
+    print("\nHere is how you can use this script\n")
+    print("Usage: python %s"%sys.argv[0])
+    print("\t -K <int>  (number of populations)")
+    print("\t --input=<file>  (/path/to/input/file; same as output flag passed to structure.py)")
+    print("\t --output=<file> (/path/to/output/file)")
+    print("\t --popfile=<file> (file with known categorical labels; optional)")
+    print("\t --title=<figure title> (a title for the figure; optional)")
 
 
 if __name__=="__main__":
@@ -152,7 +152,7 @@ if __name__=="__main__":
             usage()
             sys.exit(2)
     except getopt.GetoptError:
-        print "Incorrect options passed"
+        print("Incorrect options passed")
         usage()
         sys.exit(2)
 
@@ -160,7 +160,7 @@ if __name__=="__main__":
     
     # get the data to be plotted
     admixture, population_indices, population_labels = get_admixture_proportions(params)
-    if params.has_key('title'):
+    if 'title' in params:
         title = params['title']
     else:
         title = params['inputfile']

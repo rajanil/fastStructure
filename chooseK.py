@@ -4,6 +4,10 @@ import vars.utils as utils
 import glob
 import sys
 import pdb
+try:
+    import itertools.imap as map
+except ImportError:
+    pass
 
 def parse_logs(files):
 
@@ -50,7 +54,7 @@ def parse_varQs(files):
     bestKs = []
     for file in files:
         handle = open(file,'r')
-        Q = np.array([map(float,line.strip().split()) for line in handle])
+        Q = np.array([list(map(float,line.strip().split())) for line in handle])
         Q = Q/utils.insum(Q,[1])
         handle.close()
 
@@ -79,9 +83,9 @@ def usage():
     brief description of various flags and options for this script
     """
 
-    print "\nHere is how you can use this script\n"
-    print "Usage: python %s"%sys.argv[0]
-    print "\t --input=<file>"
+    print("\nHere is how you can use this script\n")
+    print("Usage: python %s"%sys.argv[0])
+    print("\t --input=<file>")
 
 if __name__=="__main__":
 
@@ -95,7 +99,7 @@ if __name__=="__main__":
             usage()
             sys.exit(2)
     except getopt.GetoptError:
-        print "Incorrect options passed"
+        print("Incorrect options passed")
         usage()
         sys.exit(2)
 
@@ -108,5 +112,5 @@ if __name__=="__main__":
     files = glob.glob('%s.*.meanQ'%filetag)
     bestKs = parse_varQs(files)
 
-    print "Model complexity that maximizes marginal likelihood = %d"%Ks[np.argmax(marginal_likelihoods)]
-    print "Model components used to explain structure in data = %d"%np.argmax(np.bincount(bestKs)) 
+    print("Model complexity that maximizes marginal likelihood = %d"%Ks[np.argmax(marginal_likelihoods)])
+    print("Model components used to explain structure in data = %d"%np.argmax(np.bincount(bestKs))) 

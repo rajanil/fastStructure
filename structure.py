@@ -41,7 +41,7 @@ def parseopts(opts):
             params['prior'] = arg
 
             if params['prior'] not in ['simple','logistic']:
-                print "%s prior is not currently implemented, defaulting to the simple prior"
+                print("%s prior is not currently implemented, defaulting to the simple prior")
                 params['prior'] = 'simple'
 
         elif opt in ["--format"]:
@@ -70,31 +70,31 @@ def checkopts(params):
     """
 
     if params['mintol']<=0:
-        print "a non-positive value was provided as convergence criterion"
+        print("a non-positive value was provided as convergence criterion")
         raise ValueError
     
     if params['cv']<0:
-        print "a negative value was provided for the number of cross-validations folds"
+        print("a negative value was provided for the number of cross-validations folds")
         raise ValueError
 
-    if not params.has_key('K'):
-        print "a positive integer should be provided for number of populations"
+    if 'K' not in params:
+        print("a positive integer should be provided for number of populations")
         raise KeyError
 
     if params['format'] not in ['bed','str']:
-        print "%s data format is not currently implemented"
+        print("%s data format is not currently implemented")
         raise ValueError
 
     if params['K']<=0:
-        print "a negative value was provided for the number of populations"
+        print("a negative value was provided for the number of populations")
         raise ValueError
     
-    if not params.has_key('inputfile'):
-        print "an input file needs to be provided"
+    if 'inputfile' not in params:
+        print("an input file needs to be provided")
         raise KeyError 
 
-    if not params.has_key('outputfile'):
-        print "an output file needs to be provided"
+    if 'outputfile' not in params:
+        print("an output file needs to be provided")
         raise KeyError
     
 def write_output(Q, P, other, params):
@@ -128,17 +128,17 @@ def usage():
     brief description of various flags and options for this script
     """
 
-    print "\nHere is how you can use this script\n"
-    print "Usage: python %s"%sys.argv[0]
-    print "\t -K <int> (number of populations)"
-    print "\t --input=<file> (/path/to/input/file)"
-    print "\t --output=<file> (/path/to/output/file)"
-    print "\t --tol=<float> (convergence criterion; default: 10e-6)"
-    print "\t --prior={simple,logistic} (choice of prior; default: simple)"
-    print "\t --cv=<int> (number of test sets for cross-validation, 0 implies no CV step; default: 0)"
-    print "\t --format={bed,str} (format of input file; default: bed)"
-    print "\t --full (to output all variational parameters; optional)"
-    print "\t --seed=<int> (manually specify seed for random number generator; optional)"
+    print("\nHere is how you can use this script\n")
+    print("Usage: python %s"%sys.argv[0])
+    print("\t -K <int> (number of populations)")
+    print("\t --input=<file> (/path/to/input/file)")
+    print("\t --output=<file> (/path/to/output/file)")
+    print("\t --tol=<float> (convergence criterion; default: 10e-6)")
+    print("\t --prior={simple,logistic} (choice of prior; default: simple)")
+    print("\t --cv=<int> (number of test sets for cross-validation, 0 implies no CV step; default: 0)")
+    print("\t --format={bed,str} (format of input file; default: bed)")
+    print("\t --full (to output all variational parameters; optional)")
+    print("\t --seed=<int> (manually specify seed for random number generator; optional)")
 
 
 if __name__=="__main__":
@@ -153,7 +153,7 @@ if __name__=="__main__":
             usage()
             sys.exit(2)
     except getopt.GetoptError:
-        print "Incorrect options passed"
+        print("Incorrect options passed")
         usage()
         sys.exit(2)
 
