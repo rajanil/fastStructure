@@ -6,6 +6,7 @@ from cpython cimport bool
 from scipy.special import digamma, gammaln, polygamma
 import scipy.optimize as opt
 import utils
+from functools import reduce
 
 ctypedef np.uint8_t uint8_t
 
