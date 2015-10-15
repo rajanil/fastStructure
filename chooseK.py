@@ -4,7 +4,7 @@ import vars.utils as utils
 import glob
 import sys
 import pdb
-from builtins import map
+from future_builtins import map
 
 def parse_logs(files):
 

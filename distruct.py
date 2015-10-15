@@ -3,7 +3,6 @@ import matplotlib.pyplot as plot
 import colorsys
 import getopt
 import sys, pdb
-from builtins import range
 
 def plot_admixture(admixture, population_indices, population_labels, title):
 
