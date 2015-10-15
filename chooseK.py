@@ -4,7 +4,10 @@ import vars.utils as utils
 import glob
 import sys
 import pdb
-from future_builtins import map
+try:
+    import itertools.imap as map
+except ImportError:
+    pass
 
 def parse_logs(files):
 
