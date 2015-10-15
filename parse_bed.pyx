@@ -11,12 +11,13 @@ cdef dict genomap = dict([('00',0),('01',1),('11',2),('10',3)])
 def load(file):
 
     cdef int n, l, i, Nindiv, Nsnp, Nbytes
-    cdef str line, checkA, checkB, checkC, bytestr
+    cdef bytes line
+    cdef str checkA, checkB, checkC, bytestr
     cdef np.ndarray genotype
 
     # number of individuals
     handle = open(file+'.fam','r')
-    for i,line in enumerate(handle):
+    for i, li in enumerate(handle):
         pass
     Nindiv = i+1
 
@@ -25,7 +26,7 @@ def load(file):
 
     # number of SNPs
     handle = open(file+'.bim','r')
-    for i,line in enumerate(handle):
+    for i, li in enumerate(handle):
         pass
     Nsnp = i+1
 
