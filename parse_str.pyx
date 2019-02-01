@@ -5,7 +5,7 @@ def load(file):
 
     # read in data from file
     handle = open(file+'.str','r')
-    loci = np.array([line.strip().split()[7:] for line in handle])
+    loci = np.array([line.strip().split()[6:] for line in handle])
     N = loci.shape[0]/2
     L = loci.shape[1]
 

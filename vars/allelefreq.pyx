@@ -143,18 +143,6 @@ cdef class AlleleFreq:
         # use an iterative fixed-point solver to update parameter estimates.
         var_beta, var_gamma = self._unconstrained_solver(Dvarbeta, Dvargamma)
 
-        # identify variables where positivity constraints are violated
-        bad_conditions = [(var_beta<=0),(var_gamma<=0),np.isnan(var_beta),np.isnan(var_gamma)]
-        vars_at_boundary = np.any(reduce(utils.OR,bad_conditions),1)
-
-        if vars_at_boundary.sum():
-            print "%d vars at boundary"%vars_at_boundary.sum()
-#            var_beta[vars_at_boundary] = self.var_beta[vars_at_boundary]
-#            var_gamma[vars_at_boundary] = self.var_gamma[vars_at_boundary]
-#            varbeta, vargamma = self._constrained_solver(G, Dvarbeta, Dvargamma, vars_at_boundary)
-#            var_beta[vars_at_boundary,:] = varbeta.copy()
-#            var_gamma[vars_at_boundary,:] = vargamma.copy()
-
         # if a variable violates positivity constraint, 
         # set it to an estimate from the previous update
         bad_beta = reduce(utils.OR,[(var_beta<=0),np.isnan(var_beta)])
