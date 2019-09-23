@@ -11,8 +11,8 @@ the algorithm on a test simulated genotype dataset.
 
 Anil Raj, Matthew Stephens, and Jonathan K. Pritchard. *fastSTRUCTURE: Variational Inference of 
 Population Structure in Large SNP Data Sets*, (Genetics) June 2014 197:573-589
-[[Genetics](www.genetics.org/content/197/2/573.full),
-[Biorxiv](biorxiv.org/content/early/2013/12/02/001073)]
+[[Genetics](http://www.genetics.org/content/197/2/573.full),
+[Biorxiv](http://biorxiv.org/content/early/2013/12/02/001073)]
 
 ## Parts 
 
